@@ -1,0 +1,57 @@
+.loginContainer{
+    color:#000;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+.rowBackgroundImg{
+    background-image: url("https://t3.ftcdn.net/jpg/02/21/90/22/360_F_221902233_dVRtPojWB62WzEZ6zc2cgv6gIgSbuzdO.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    height: 100vh;
+}
+.loginContainer .card{
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+    width: 600px;
+    height: 500px;
+    margin-top: 30%;
+}
+.card{
+    background-color: #fff;
+    border-radius: 10px;
+}
+.signBtn{
+    padding: 10px;
+    border: 1px solid #b798b5 !important;
+    background-color: #b798b5;
+    width: 100% !important;
+    border-radius: 14px;
+    color: #fff !important;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    display: grid;
+}
+.signBtn:hover{
+    background-color: #fff;
+    color: #b798b5 !important;
+}
+.form-check{
+    margin-left: auto;
+}
+input{
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    border:none !important;
+    border-radius: 0px !important;
+    border-bottom: 1px solid #b798b5 !important;
+}
+
+.forgotPassword{
+    float: right;
+    padding: 10px
+}

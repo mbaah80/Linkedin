@@ -1,0 +1,45 @@
+.manageNetworks{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 14px;
+}
+.network  .card-body{
+    padding: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.network .card-title{
+    padding: 10px;
+}
+.connectBtn{
+    background-color: #fff;
+    color: #1d72c7;
+    border: 1px solid #1d72c7;
+    border-radius: 40px;
+    width: 100%;
+    margin-top: 80%;
+    margin-bottom: 10px;
+}
+.connectBtn:hover{
+    background-color: #e2f0fe;
+    color: #1d72c7;
+}
+.connectCard{
+    padding: 10px;
+}
+.connectCard .card-footer{
+    background-color: transparent;
+    border: none;
+}
+.connectUserCard{
+    height: 260px;
+}
+
+.connectUserCard .btn{
+    margin-top: auto;
+}
+
+.connectUserCard:hover{
+    box-shadow: 0px 0px 10px 0px #c7c7c7;
+}

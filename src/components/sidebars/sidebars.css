@@ -1,0 +1,257 @@
+.profileAvatar{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+.profileAvatarPost{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+.profileAvatarReaction{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+.userProfileAvatar{
+    width: 70px;
+    height:70px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+    margin-top: -50px;
+    background-color: #fff !important;
+    padding:2px
+}
+.feedContainer{
+    display: flex;
+    margin-bottom: 10px;
+}
+.avatarInfo{
+    display: grid;
+    grid-template-columns: 1fr;
+}
+.nameBtn{
+    display: flex;
+    justify-content: space-between;
+}
+
+.nameBtn .btn{
+    background-color: transparent;
+    color:#1d72c7;
+    border:none
+}
+.startPostFooter{
+    border: none;
+    display: flex;
+    justify-content: space-between;
+}
+.startPostFooter .fa{
+    margin-left: 1px;
+}
+small{
+    color:#a8a3a3;
+}
+.Post{
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 14px;
+}
+.homeCard .card-footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+    padding: 1px !important;
+}
+.homeCard .card-footer .btn-default{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.homeCard .card-footer .btn-default .fa{
+    margin-right: 5px;
+}
+.homeCard .card-footer .btn-default:hover{
+    background-color: #ebebeb;
+}
+.homeCard input{
+    border: none !important;
+    outline: none;
+    background-color: transparent;
+    width: 100%;
+    font-size: 18px;
+}
+.modalBtn{
+    background-color: #fff;
+    border: 2px solid #9b9b9b;
+    border-radius: 40px;
+    color: #9b9b9b;
+    margin-right: 5px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modalBtn:hover{
+    background-color: #ebebeb;
+}
+.modalBtn .fa{
+    margin-left: 7px;
+    margin-right: 7px;
+}
+.postBtn{
+    border-radius: 40px;
+    background-color: #ebebeb;
+}
+.leftSideBar .card-footer{
+    background-color: #fff;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+    padding: 0px !important;
+    width: 100%;
+}
+.accessTool{
+    width: 100%;  
+}
+.hashtag{
+    margin-top: 100px;
+}
+.hashtag .btn-primary{
+    background-color: transparent;
+    border: none;
+    color: #1d72c7;
+    font-weight: bold;
+}
+.hashtag .btn-primary:hover{
+    background-color: #e2f0fe;
+}
+
+.accessTool:hover{
+    background-color: #ebebeb;
+}
+.avatarDropdownMenu{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.postActions{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.divider{
+    color: #d6d0d0;
+}
+b{
+    color: #000;
+}
+.followBtn{
+    background-color: #fff;
+    border: 2px solid #9b9b9b;
+    border-radius: 40px;
+    color: #9b9b9b;
+    width: 120px;
+    margin-top: 10px;
+}
+.SearchBtn{
+    background-color: #fff;
+    border: 1px solid #9b9b9b;
+    border-radius: 40px;
+    color: #9b9b9b;
+    width: 350px !important;
+    text-align: left;
+}
+.SearchBtn:focus{
+    background-color: #fff;
+    color: #000;
+    outline: none;
+}
+.SearchBtn:hover{
+    background-color: #ebebeb;
+    border: 1px solid #848484;
+    color: #9b9b9b;
+}
+.followBtn:hover{
+    background-color: #ebebeb;
+    border: 2px solid #848484;
+    color: #9b9b9b;
+
+}
+.rightSidebar .card-title{
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.recommedBtn{
+    color: #9b9b9b;
+}
+
+.recommedBtn:hover{
+    background-color: #ebebeb;
+}
+.writeComment{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #ebebeb;
+    border-radius: 50px;
+    width: 100%;
+    padding: 5px;
+}
+.writeComment input{
+    border: none !important;
+    outline: none;
+    padding: 10px;
+    width: 100%;
+}
+.commentIcon{
+    border-radius: 40%;
+    font-size: 20px;
+}
+.commentIcon:hover{
+    background-color: #ebebeb;
+}
+.userProfileImg{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.userProfileName{
+    text-align: center;
+    margin-top: 15px;
+}
+.userProfileName p{
+    margin-bottom: 0px;
+}
+.viewProfiled{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.actionNumbers{
+    color: #2d7bc8;
+    font-weight: bold;
+}
+.coverImage{
+    width: 100%;
+    height: 70px;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+@media only screen and (max-width: 600px)  {
+    .rightSidebar{
+        display: none;
+    }
+}

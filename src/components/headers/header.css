@@ -1,0 +1,31 @@
+.nav-link{
+    display: grid;
+    text-align: center;
+    margin-right: 20px;
+    font-size: 14px !important;
+}
+.signBtn{
+    border: 1px solid #3c86cf;
+    width: 100px;
+    border-radius: 24px;
+    color: #3c86cf !important;
+    background-color: #fff;
+}
+.signBtn:hover{
+    background-color: #f0f7fe;
+}
+.joinBtn{
+    width: 100px;
+}
+.joinBtn:hover{
+    background-color: #f5f5f5;
+}
+nav{
+    background-color: #fff;
+    padding: 1px !important;
+    width: 100%;
+}
+.header{
+    background-color: #fff;
+    margin-bottom: 20px;
+}
