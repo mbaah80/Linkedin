@@ -1,0 +1,147 @@
+.card-body{
+    padding: 0;
+}
+.rightCard p{
+    font-size: 14px;
+    margin-bottom: 0;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    padding-top: 0.5rem;
+}
+.rightCard .card-title{
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    padding-top: 0.9rem;
+}
+
+.rightCard .actionButton{
+    padding: 1.25rem;
+}
+.rightCard .resumeBuilder{
+    display: flex;
+    align-items: center;
+    background-color: #f4f4f4;
+    padding: 5px;
+}
+.rightCard .card-body{
+    padding: 0;
+}
+.resumeBuilder img{
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.middleCard .keyWords{
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    padding-top: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.jobListHeader{
+    padding-top: 0.9rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+}
+.middleCard .fa{
+    font-size: 1.5rem;
+    color: #8e8e8e;
+}
+.middleCard ul {
+    list-style: none;
+    display: inline-grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+.middleCard li{
+    padding: 4px;
+}
+.middleCard ul .fa{
+    font-size: 15px;
+    color: #0077B5;
+}
+.middleCard ul a{
+    background-color: #fff;
+    border: 1px solid #0077B5;
+    border-radius: 40px;
+    color: #0077B5;
+    padding: 5px !important;
+    font-size: 12px;
+    font-weight: bold;
+}
+.middleCard ul a:hover{
+    background-color: #e2f0fe;
+    text-decoration: none;
+    font-weight: bold;
+}
+.middleCard .card-body{
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.middleCard .jobList{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    border-bottom: 1px solid #e1e0e0 ;
+}
+.JobImgContent{
+    display: flex;
+    justify-content: space-between;
+}
+.middleCard .jobListContent{
+    display: inline-grid;
+}
+.jobListContent small{
+    margin: 2px;
+}
+.jobList img{
+    width: 50px;
+    height:50px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+.jobListContent .fa{
+    font-size: 15px;
+    color: #3c86cf;
+}
+.jobListContent h6{
+    color: #3c86cf;
+}
+.companyName{
+    color: #000;
+}
+.time{
+    color: #2c8b60;
+    font-weight: bold;
+    margin-bottom: 20px !important;
+}
+.badge{
+    font-size: 12px;
+    font-weight: normal;
+}
+.saveJob{
+    border-radius: 40px;
+    height: 50px;
+    width: 50px;
+}
+.saveJob:hover{
+    background-color: #ebebeb;
+    height: 50px;
+    width: 50px;
+}
+.middleCard .card-footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.showAll{
+    color: #787676;
+    width: 100%;
+}
+.showAll:hover{
+    text-decoration: none;
+    color: #787676;
+}
