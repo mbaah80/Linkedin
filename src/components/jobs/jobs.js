@@ -8,7 +8,7 @@ let Jobs = () => {
         <div className="header">
             <Header/>
         </div>
-        <div className="container">
+        <div className="container Jobs">
             <div className="row">
                 <div className="col-md-3">
                     <div className="card leftCard">
@@ -131,7 +131,7 @@ let Jobs = () => {
                         <div className="card-body">
                             <a href="#" className="btn btn-default btn-sm resumeBuilder">
                                 <p>I want to improve my resume</p>
-                                <img src="https://www.linkedin.com/dms/C4D0DAQFdDVwn9b17iA/learning-public-crop_60_100/0/1568251157263?m=AQL2Bz6rZ4Aj6AAAAYXz14CXkbaGBkBCmEO8cIVZ-zWwhHZX6cFJ7LhM5w&e=1674919664&v=beta&t=3KN1KmR--uqXM3owEErc3rBPCq9NOB6CesvqV9GbKBM" alt="resume"/>
+                                <img src="https://clipart.world/wp-content/uploads/2021/06/Resume-clipart-png-images.png" alt="resume"/>
                             </a>
                             <p>
                                 Explore our curated guide of expert-led courses, such as how to improve your resume and grow your network, to help you land your next opportunity.
