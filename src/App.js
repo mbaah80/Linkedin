@@ -11,7 +11,7 @@ function App() {
   return (
     <div className="App">
       <div className="container-fluid">
-          <Login />
+          <Home />
       </div>
     </div>
   );

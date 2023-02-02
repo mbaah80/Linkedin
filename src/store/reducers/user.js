@@ -1,26 +1,52 @@
+import {LOGIN, REGISTER, LOGOUT, UPDATE_USER, SET_USER, DELETE_USER } from "../actions/userAction";
+
 const initialState = {
     user: {},
 }
-const user = (state = initialState,  action) => {
+const userReducer = (state = initialState,  action) => {
     switch (action.type) {
-        case 'SET_USER':
+        case SET_USER:
             return {
                 ...state,
-                user: action.user
+                user: action.payload
             }
-        case 'Login_User':
+        case LOGIN:
             return{
                 ...state,
-                user: action.user
+                user: {
+                    ...state.user,
+                    email: action.payload.email,
+                    password: action.payload.password
+                }
             }
-        case 'Logout_User':
+            case REGISTER:
+                return{
+                    ...state,
+                    user: {
+                        ...state.user,
+                        name: action.payload.name,
+                        email: action.payload.email,
+                        password: action.payload.password
+                    }
+                }
+            case LOGOUT:
             return{
                 ...state,
-                user: action.user
+                user: {}
             }
+            case UPDATE_USER:
+                return{
+                    ...state,
+                    user: {...state.user, ...action.payload}
+                }
+                case DELETE_USER:
+                    return{
+                        ...state,
+                        user: {}
+                    }
         default:
             return state;
     }
 }
 
-export default user;
+export default userReducer;

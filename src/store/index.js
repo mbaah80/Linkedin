@@ -1,35 +1,9 @@
-import { createStore } from 'redux';
-import rootReducer from './reducers';
+import { createStore, applyMiddleware  } from 'redux';
+import thunk from 'redux-thunk';
+import rootReducer from './reducers/rootReducer';
 
-const initialState = {
-    user: {},
-    feeds: [],
-    comments: [],
-    likes: [],
-    followers: [],
-    jobs: [],
-    notifications: [],
-    networks: [],
-};
 
-const user = (state = initialState, action) => {
-    switch (action.type) {
-         case 'SET_USER':
-             return {
-                 ...state,
-                 user: action.user
-             }
-         case 'Login_User':
-             return {
-                 ...state,
-                 user: action.user
-             }
-         case 'Logout_User':
-             return {
-                 ...state,
-                 user: action.user
-             }
-    }
-}
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export default store;
+

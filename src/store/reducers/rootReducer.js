@@ -1,11 +1,21 @@
+import {combineReducers} from "redux";
+import chatReducer from "./chat";
+import userReducer from "./user";
+import commentsReducer from "./comments";
+import feedReducer from "./feeds";
+import followsReducer from "./follows";
+import jobsReducer from "./jobs";
+import notificationReducer from "./notification";
 
-const  initialState  = {
-    auth:{},
-    feeds:[]
-}
+const rootReducer = combineReducers({
+    chat: chatReducer,
+    user: userReducer,
+    comments: commentsReducer,
+    feeds: feedReducer,
+    follows: followsReducer,
+    jobs: jobsReducer,
+    notifications: notificationReducer
+});
 
-const rootReducer = (state = initialState, action) => {
-    return state;
-}
 
 export default rootReducer;
