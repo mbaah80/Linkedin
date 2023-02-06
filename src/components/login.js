@@ -1,6 +1,7 @@
 import React, {useState}  from "react";
 import {useDispatch} from "react-redux";
 import {login} from "../store/actions/userAction";
+import {Link, useLocation} from "react-router-dom";
 import './login.css'
 
 
@@ -8,11 +9,19 @@ let Login = () => {
 
     let [email, setEmail] = useState("");
     let [password, setPassword] = useState("");
+    let [error, setError] = useState('')
     let dispatch = useDispatch();
+    let location = useLocation()
 
     const loginHandler = (e) =>{
         e.preventDefault();
-        dispatch(login(email, password));
+        let emailRegex = '';
+        if(email !== '' && password !== ''){
+            dispatch(login(email, password))
+        }else{
+            //alert("Email or Password field can't be empty")
+            setError('Email or Password field can\'t be empty')
+        }
     }
 
 
@@ -38,9 +47,9 @@ let Login = () => {
                         </small>
                         <button type="submit" class="btn btn-primary signBtn">Sign in</button> 
                         <small >
-                          <a href="#passwordForgot" className="join">
+                          <Link to="/register" className="join">
                             Don't Have an account ? Join now
-                          </a>
+                          </Link>
                         </small>
                     </form>
                     </div>

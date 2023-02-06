@@ -1,6 +1,7 @@
 import React, {useState}  from "react";
 import {useDispatch} from "react-redux";
 import {register} from "../store/actions/userAction";
+import {Link} from 'react-router-dom'
 import './login.css'
 
 let Register = () => {
@@ -40,9 +41,9 @@ let Register = () => {
                         
                         <button type="submit" class="btn btn-primary signBtn">Join now</button>
                         <small >
-                          <a href="#passwordForgot" className="join">
+                          <Link to="/" className="join">
                             Already Have an account ? Sign in
-                          </a>
+                          </Link>
                         </small>
                     </form>
                     </div>

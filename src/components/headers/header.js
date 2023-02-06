@@ -1,14 +1,11 @@
 import React from "react";
-import { BrowserRouter, Route, Link } from 'react-router-dom';
-import Home from '../home'
-import Network from '../networks/network'
-import Jobs from '../jobs/jobs';
-import Notification  from "../notifications/notification";
+import {
+    Link,
+} from "react-router-dom";
 import './header.css';
 
 let Header = () => {
     return (
-    <BrowserRouter>
         <div className="container">
             <nav className="navbar navbar-expand-lg navbar-light ">
                 <a className="navbar-brand" href="#">
@@ -22,34 +19,34 @@ let Header = () => {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ml-auto">
                         <li className="nav-item">
-                            <Route className="nav-link" path="/home" component={Home}>
+                            <Link className="nav-link" to="/home" >
                                 <i className="fa fa-home" aria-hidden="true"></i>
                                 Home
-                            </Route>
+                            </Link>
                         </li>
                         <li className="nav-item">
-                            <Route className="nav-link" path="network" component={Network}>
+                            <Link className="nav-link" to="/network" >
                                 <i className="fa fa-users" aria-hidden="true"></i>
                                 My Network
-                            </Route>
+                            </Link>
                         </li>
                         <li className="nav-item">
-                            <Route className="nav-link" path="/jobs" component={Jobs}>
+                            <Link className="nav-link" to="/jobs" >
                                 <i className="fa fa-briefcase" aria-hidden="true"></i>
                                 Jobs
-                            </Route>
+                            </Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">
+                            <Link className="nav-link" to="#">
                                 <i className="fa fa-commenting" aria-hidden="true"></i>
                                 Messaging
-                            </a>
+                            </Link>
                         </li>
                         <li className="nav-item">
-                            <Route className="nav-link" path="/notification" component={Notification}>
+                            <Link className="nav-link" to="/notification" >
                                 <i className="fa fa-bell" aria-hidden="true"></i>
                                 Notifications
-                            </Route>
+                            </Link>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link d-flex align-items-center" href="#">
@@ -70,7 +67,6 @@ let Header = () => {
                 </div>
             </nav>
         </div>
-    </BrowserRouter>
     )
 }
 export default Header;

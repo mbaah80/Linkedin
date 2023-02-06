@@ -23,6 +23,7 @@ export const  login = (email, password) => async (dispatch) =>{
     dispatch({type: LOGIN, payload: res.data});
   }catch(err){
     console.error(err.response.data.msg);
+    dispatch(err.response.data.msg)
   }
 }
 
