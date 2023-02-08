@@ -1,7 +1,9 @@
 import {LOGIN, REGISTER, LOGOUT, UPDATE_USER, SET_USER, DELETE_USER } from "../actions/userAction";
 
 const initialState = {
-    user: {},
+    user: localStorage.getItem("user"),
+    isLoggedIn: false,
+    error: null,
 }
 const userReducer = (state = initialState,  action) => {
     switch (action.type) {
@@ -19,31 +21,31 @@ const userReducer = (state = initialState,  action) => {
                     password: action.payload.password
                 }
             }
-            case REGISTER:
-                return{
-                    ...state,
-                    user: {
-                        ...state.user,
-                        name: action.payload.name,
-                        email: action.payload.email,
-                        password: action.payload.password
-                    }
+        case REGISTER:
+            return{
+                ...state,
+                user: {
+                    ...state.user,
+                    name: action.payload.name,
+                    email: action.payload.email,
+                    password: action.payload.password
                 }
-            case LOGOUT:
+            }
+        case LOGOUT:
             return{
                 ...state,
                 user: {}
             }
-            case UPDATE_USER:
-                return{
-                    ...state,
-                    user: {...state.user, ...action.payload}
-                }
-                case DELETE_USER:
-                    return{
-                        ...state,
-                        user: {}
-                    }
+        case UPDATE_USER:
+            return{
+                ...state,
+                user: {...state.user, ...action.payload}
+            }
+        case DELETE_USER:
+            return{
+                ...state,
+                user: {}
+            }
         default:
             return state;
     }
