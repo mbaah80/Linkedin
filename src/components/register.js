@@ -1,7 +1,8 @@
-import React, {useState}  from "react";
-import {useDispatch} from "react-redux";
-import {register} from "../store/actions/userAction";
-import {Link} from 'react-router-dom'
+import React, {useEffect, useState} from "react";
+import {useSelector, useDispatch} from "react-redux";
+import {Link, useNavigate} from "react-router-dom";
+import {register, reset} from "../features/auth/authSlice";
+import Spinner from './spinner'
 import './login.css'
 
 let Register = () => {
@@ -9,11 +10,31 @@ let Register = () => {
     let [name, setName] = useState("");
     let [email, setEmail] = useState("");
     let [password, setPassword] = useState("");
+    let [error, setError] = useState('')
+    let location = useNavigate();
     let dispatch = useDispatch();
+
+    const {user, isError, isSuccess, isLoading, message} = useSelector(state => state.auth)
+
+    useEffect(()=>{
+        if(isError){
+            setError(message)
+        }
+        if(isSuccess || user){
+            location('/home')
+        }
+        dispatch(reset())
+
+    },[user, isError, isSuccess, isLoading, message, location, dispatch])
 
     const registerHandler = (e) =>{
         e.preventDefault();
-        dispatch(register(name, email, password));
+        let userData = {
+            name,
+            email,
+            password
+        }
+        dispatch(register(userData));
     }
 
 

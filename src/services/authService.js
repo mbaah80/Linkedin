@@ -2,32 +2,30 @@ import axios from 'axios'
 
 let baseUrl = "http://localhost:3002/auth/"
 
-const login = (email, password) =>{
-    return axios.post(baseUrl + 'login', {
-        email,
-        password
-    }).then((res)=>{
-        localStorage.setItem('user', JSON.stringify(res.data))
-        return res.data
-    }).catch((err)=>{
-        console.log(err.response.data.msg)
-    })
+const login = async (userData) =>{
+    const response = await axios.post(baseUrl + 'login', userData)
+    if(response.data){
+        localStorage.setItem('user', JSON.stringify(response.data))
+    }
+   return response.data
 }
 
-const register = (name, email, password) =>{
-    return axios.post(baseUrl + 'register', {
-        name, email, password
-    }).then((res)=>{
-        localStorage.setItem('user', JSON.stringify(res.data))
-        return res.data
-    }).catch((err)=>{
-        console.log(err)
-    })
+const register = async (userData) =>{
+    const response = await axios.post(baseUrl + 'register', userData)
+    if(response.data){
+        localStorage.setItem('user', JSON.stringify(response.data))
+    }
+    return response.data
+}
+
+const logout = async () =>{
+    localStorage.removeItem('user')
 }
 
 
 export default {
     login,
-    register
+    register,
+    logout
 
 }

@@ -1,10 +1,25 @@
 import React from "react";
 import {
-    Link,
+    Link, useNavigate
 } from "react-router-dom";
+import {useSelector, useDispatch} from "react-redux";
+import {logout, reset} from "../../features/auth/authSlice";
 import './header.css';
 
 let Header = () => {
+
+    let location = useNavigate();
+    let dispatch = useDispatch();
+
+    const {user} = useSelector(state => state.auth)
+    const logoutHandle = () =>{
+        dispatch(logout())
+        dispatch(reset())
+        location('/')
+    }
+
+
+
     return (
         <div className="container">
             <nav className="navbar navbar-expand-lg navbar-light ">
@@ -52,7 +67,8 @@ let Header = () => {
                             <a className="nav-link d-flex align-items-center" href="#">
                                 <img src="https://expertphotography.b-cdn.net/wp-content/uploads/2019/12/headshot-1.jpg"
                                      className="profileAvatarPost"/>
-                                <i className="fa fa-caret-down" aria-hidden="true"></i>
+                                {/*<i className="fa fa-caret-down" aria-hidden="true"></i>*/}
+                                <b>{user && user.user.name}</b>
                             </a>
                         </li>
                         <li className="nav-item">
@@ -61,7 +77,8 @@ let Header = () => {
                             </a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link btn btn-default joinBtn" href="#">Join now</a>
+                            <button className="nav-link btn btn-default d-flex align-items-center"  onClick={logoutHandle}><i
+                                className="fa fa-sign-out mr-2" aria-hidden="true"></i> Logout</button>
                         </li>
                     </ul>
                 </div>
