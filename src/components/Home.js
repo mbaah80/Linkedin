@@ -14,6 +14,7 @@ let Home = () => {
     useEffect(()=>{
         if(!user){
             location('/')
+
         }
     },[user, location])
 

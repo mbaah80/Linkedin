@@ -34,7 +34,11 @@ let Register = () => {
             email,
             password
         }
-        dispatch(register(userData));
+        if(userData.name !== '' && userData.email !== '' && userData.password !== ''){
+            dispatch(register(userData));
+        }else{
+            setError('All fields are required')
+        }
     }
 
 
@@ -47,6 +51,7 @@ let Register = () => {
                     <div class="card-body">
                     <form onSubmit={registerHandler}>
                     <img src="/images/Linkedin-Logo-2048x1280.png" alt="Linkedin-Logo-2048x1280.webp" width="130" height="70" className="d-flex" />
+                        {error && (<div className="alert alert-danger" role="alert">{error}</div>)}
                     <div class="form-group">
                             <label for="name">Full name</label>
                             <input type="text" class="form-control" id="name" value={name} onChange={(e)=>setName(e.target.value)}/>

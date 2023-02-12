@@ -1,7 +1,41 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import {useSelector, useDispatch} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {post, reset} from "../features/post/postSlice";
+import Spinner from './spinner'
 import './sidebars/sidebars.css'
 
 let HomeCard = () =>{
+
+    let location = useNavigate();
+    let dispatch = useDispatch();
+    let [message, setMessage] = useState('')
+    let [error, setError] = useState('')
+    let [picture, setPicture] = useState('')
+    let [disable, setDisabled] = useState(true)
+
+    const {isError, isSuccess, isLoading, message: msg} = useSelector(state => state.post)
+
+    useEffect(()=>{
+        if(isError){
+            setError(msg)
+        }
+        if(isSuccess){
+            setMessage(msg)
+        }
+        dispatch(reset())
+    },[isError, isSuccess, isLoading, msg, dispatch])
+
+    let postHandler = (e) =>{
+        e.preventDefault();
+        let postData = {
+            message,
+            picture
+        }
+        dispatch(post(postData))
+    }
+
+
     return(
         <div className="col-md-5 homeCard">
            <div class="card">
@@ -77,12 +111,13 @@ let HomeCard = () =>{
                     </button>
                 </div>
                 <div class="modal-body">
+                    {error && <div className="alert alert-danger">{error}</div>}
                 <div className="feedContainer">
                     <img src="https://expertphotography.b-cdn.net/wp-content/uploads/2019/12/headshot-1.jpg"  className="profileAvatar" />
                     <button className="btn btn-default btn-sm modalBtn mt-1"><i class="fa fa-street-view" aria-hidden="true"></i> Michael Yeboah <i class="fa fa-caret-down" aria-hidden="true"></i></button>
                     <button className="btn btn-default btn-sm modalBtn mt-1"><i class="fa fa-globe" aria-hidden="true"></i> Anyone <i class="fa fa-caret-down" aria-hidden="true"></i></button>
                 </div>
-                    <input type="text" className="form-control mt-2" placeholder="What's on your mind?" />
+                    <input type="text" className="form-control mt-2" placeholder="What's on your mind?" value={message} onChange={(e)=>setMessage(e.target.value)} />
                     <div className="d-flex align-items-center hashtag">
                         <button className="btn btn-default btn-sm commentIcon"><i class="fa fa-smile-o" aria-hidden="true"></i> </button>
                         <a href="#" className="ml-2 btn btn-primary btn-sm"> Add hashtag</a>
@@ -99,7 +134,7 @@ let HomeCard = () =>{
                     </div>
                     <div>
                         <button type="button" class="btn btn-default" ><i class="fa fa-clock-o" aria-hidden="true"></i></button>
-                        <button type="button" disabled class="btn btn-default  postBtn">Post</button>
+                        <button type="button" disabled={!message }  class="btn btn-default  postBtn" onClick={postHandler}>Post</button>
                     </div>
                 </div>
                 </div>
