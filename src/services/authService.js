@@ -26,9 +26,9 @@ const logout = async () =>{
 }
 
 
-export default {
+const authService = {
     login,
     register,
     logout
-
 }
+export default authService

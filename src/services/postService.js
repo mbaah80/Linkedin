@@ -4,26 +4,41 @@ let baseUrl = "http://localhost:3002/";
 
 
 
-const createPost = async (postData) => {
-    let token = localStorage.getItem('token')
-    const response = await axios.post(baseUrl + 'posts', postData,{
+const createPost = async (postData, token) => {
+    const config = {
         headers: {
             'Authorization': `Bearer ${token}`
         }
-    })
+    }
+    const response = await axios.post(baseUrl + 'posts/CreatePost', postData, config)
     return response.data
 }
 
 
-const getFeedPosts = async () =>{
-    const response = await axios.get(baseUrl + 'post', {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-    })
+const getFeedPosts = async (token) =>{
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    const response = await axios.get(baseUrl + 'posts', config)
     return response.data
 }
 
+const getFeedPostsByUserId = async (token) =>{
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+        const response = await axios.get(baseUrl + 'posts/getFeedPostsByUserId', config)
+        return response.data
+}
 
-export default {
+const postService = {
     createPost,
-    getFeedPosts
+    getFeedPosts,
+    getFeedPostsByUserId
 }
+
+export default postService

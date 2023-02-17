@@ -117,6 +117,7 @@ small{
 .postBtn{
     border-radius: 40px;
     background-color: #ebebeb;
+    margin-right: 20px;
 }
 .leftSideBar .card-footer{
     background-color: #fff;
@@ -255,6 +256,37 @@ b{
     object-fit: cover;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
+}
+.modal .modal-footer{
+    padding: 0px !important;
+}
+.textAreaBorder{
+    border: none !important;
+    outline: none;
+    width: 100%;
+
+}
+textarea {
+    resize: none;
+    overflow: hidden;
+    height: auto;
+}
+
+.textAreaBorder:focus{
+    border: none !important;
+    outline: none;
+}
+.textAreaBorder:active{
+    border: none !important;
+    outline: none;
+}
+.form-control:focus {
+    border: none !important;
+    outline: none;
+}
+.feedImage{
+    height: 350px;
+    object-fit: cover;
 }
 @media only screen and (max-width: 600px)  {
     .rightSidebar{

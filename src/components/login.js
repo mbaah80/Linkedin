@@ -7,10 +7,6 @@ import './login.css'
 
 let Login = () => {
 
-    const toastHand = () => {
-
-    }
-
     let [email, setEmail] = useState("");
     let [password, setPassword] = useState("");
     let [error, setError] = useState('')
