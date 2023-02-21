@@ -35,14 +35,12 @@ const userFriends = async (userId, token) =>{
 }
 
 const followUser = async (userId, token) =>{
-    console.log(userId, token)
     const config = {
         headers: {
             'Authorization': `Bearer ${token}`
         }
     }
     const response = await axios.put(baseUrl + 'users/follow/' + userId, {}, config)
-    console.log(response.data)
     return response.data
 }
 

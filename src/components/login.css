@@ -56,4 +56,27 @@ input{
     padding: 10px
 }
 
-
+.profileImage{
+    width: 70px;
+    height:70px;
+    border-radius: 50%;
+    border: #666666 2px solid;
+    object-fit: cover;
+}
+.profileImage:hover{
+    border: #b798b5 2px solid;
+}
+.profileIcon{
+    font-size: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profileIcon:hover{
+    color: #b798b5;
+}
+.profileImageContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

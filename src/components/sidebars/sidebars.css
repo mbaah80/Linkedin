@@ -39,19 +39,22 @@
     display: flex;
     margin-bottom: 10px;
 }
-.avatarInfo{
-    display: grid;
-    grid-template-columns: 1fr;
-}
+
 .nameBtn{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between !important;
+    align-items: center;
 }
 
 .nameBtn .btn{
     background-color: transparent;
     color:#1d72c7;
     border:none
+}
+.secondNameFollowHolder{
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
 }
 .startPostFooter{
     border: none;
@@ -176,6 +179,11 @@ b{
     color: #9b9b9b;
     width: 350px !important;
     text-align: left;
+    height: 50px;
+}
+.card-img, .card-img-top{
+    border-top-left-radius: 1px !important;
+    border-top-right-radius: 1px !important;
 }
 .SearchBtn:focus{
     background-color: #fff;
@@ -287,6 +295,9 @@ textarea {
 .feedImage{
     height: 350px;
     object-fit: cover;
+}
+.followHolder{
+    margin-left: auto !important;
 }
 @media only screen and (max-width: 600px)  {
     .rightSidebar{

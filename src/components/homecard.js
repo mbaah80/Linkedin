@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {useDropzone} from 'react-dropzone'
+import moment from 'moment';
 import {createPost, getFeedPosts, reset} from "../features/post/postSlice";
+import {followUser} from "../features/user/userSlice";
 import Spinner from './spinner'
 import './sidebars/sidebars.css'
 
@@ -16,6 +18,7 @@ let HomeCard = () =>{
 
     const {user} = useSelector(state => state.auth)
     const {posts, isError, isSuccess, isLoading, message: msg} = useSelector((state) => state.post)
+
 
     useEffect(()=>{
         if(isError){
@@ -42,13 +45,17 @@ let HomeCard = () =>{
         dispatch(createPost(postData))
     }
 
+    let followHandler = (userId) =>{
+        dispatch(followUser(userId))
+    }
+
 
     return(
         <div className="col-md-5 homeCard">
            <div className="card">
             <div className="card-body">
                 <div className="feedContainer">
-                    <img src="https://expertphotography.b-cdn.net/wp-content/uploads/2019/12/headshot-1.jpg"  className="profileAvatar" />
+                    <img src={`http://localhost:3002/profile/${user.user.picturePath}`}  className="profileAvatar" />
                     <div className="avatarInfo">
                         <button className="btn btn-primary btn-sm SearchBtn" data-toggle="modal" data-target=".bd-example-modal-lg">Start a post</button>
                     </div>
@@ -66,20 +73,24 @@ let HomeCard = () =>{
                 posts.map(post=>(
                     <div key={post._id} className="card mt-2 mb-2">
                         <div className="feedContainer mt-4 ml-4">
-                        <img src="https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg?fit=fill&w=800&h=300"  className="profileAvatar" />
+                        <img src={`http://localhost:3002/profile/${post.userPicturePath}`}  className="profileAvatar" />
                         <div className="avatarInfo">
-                        <small className="nameBtn">
-                            <b>{post.name}</b>
-                            {post.name !== user.user.name && <button className="btn btn-primary btn-sm"><i className="fa fa-plus" aria-hidden="true"></i> Follow</button>}
-                        </small>
-                        <small>Tech-Entrepreneur and Business Development Specialist</small>
-                        <small>1w. <i className="fa fa-globe" aria-hidden="true"></i></small>
+                        <div className="nameBtn secondNameFollowHolder ">
+                            <a href="#" className="text-dark">{post.name}</a>
+                            <span className="followHolder">
+                                {post.name !== user.user.name && <button onClick={() => followHandler(user.user._id)} className="btn btn-primary btn-sm"><i className="fa fa-plus" aria-hidden="true"></i> Follow</button>}
+                            </span>
+                        </div>
+                        <small>{post.occupation}</small> <br/>
+                        <small>{moment(post.createdAt).subtract(1, "days").fromNow()} <i className="fa fa-globe" aria-hidden="true"></i></small>
                         </div>
                         </div>
                         <p className="Post">
                             {post.message.slice(0, 100)} <a href="#" className="text-dark ml-2">...see more</a>
                         </p>
-                        <img className="card-img-top" src={`http://localhost:3002/assets/${post.picturePath}`} alt={post.id}/>
+                        <a href="#" className="text-dark">
+                            <img className="card-img-top" src={`http://localhost:3002/assets/${post.picturePath}`} alt={post.id}/>
+                        </a>
                         <div className="card-body">
                         <p>Reactions</p>
                         <div className="feedContainer">
@@ -94,7 +105,7 @@ let HomeCard = () =>{
                         </div>
                         <div className="card-footer">
                         <a href="#" className="btn btn-default">
-                        <img src="https://expertphotography.b-cdn.net/wp-content/uploads/2019/12/headshot-1.jpg"  className="profileAvatarPost" />
+                        <img src={`http://localhost:3002/profile/${user.user.picturePath}`}  className="profileAvatarPost" />
                         <i className="fa fa-caret-down" aria-hidden="true"></i>
                         </a>
                         <a href="#" className="btn btn-default"><i className="fa fa-thumbs-o-up" aria-hidden="true"></i> Like</a>
@@ -103,7 +114,7 @@ let HomeCard = () =>{
                         <a href="#" className="btn btn-default"><i className="fa fa-paper-plane-o" aria-hidden="true"></i> Send</a>
                         </div>
                         <div className="feedContainer p-2 mt-2">
-                        <img src="https://expertphotography.b-cdn.net/wp-content/uploads/2019/12/headshot-1.jpg"  className="profileAvatar" />
+                        <img src={`http://localhost:3002/profile/${user.user.picturePath}`}  className="profileAvatar" />
                         <div className="writeComment">
                         <input type="text" className="form-control" placeholder="Write a comment..." />
                         <button className="btn btn-default btn-sm commentIcon"><i className="fa fa-smile-o" aria-hidden="true"></i></button>
@@ -126,7 +137,7 @@ let HomeCard = () =>{
                 <div className="modal-body">
                     {error && <div className="alert alert-danger">{error}</div>}
                 <div className="feedContainer">
-                    <img src="https://expertphotography.b-cdn.net/wp-content/uploads/2019/12/headshot-1.jpg"  className="profileAvatar" />
+                    <img src={`http://localhost:3002/profile/${user.user.picturePath}`}  className="profileAvatar" />
                     <button className="btn btn-default btn-sm modalBtn mt-1"><i className="fa fa-street-view" aria-hidden="true"></i> {user.user.name} <i className="fa fa-caret-down" aria-hidden="true"></i></button>
                     <button className="btn btn-default btn-sm modalBtn mt-1"><i className="fa fa-globe" aria-hidden="true"></i> Anyone <i className="fa fa-caret-down" aria-hidden="true"></i></button>
                 </div>
