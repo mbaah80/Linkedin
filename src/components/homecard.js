@@ -128,6 +128,7 @@ let HomeCard = () =>{
                         <div className=" PostReactions">
                             <small>
                                 {
+                                    Object.keys(post.likes).length > 0 &&
                                     <a href="javascript:void(0)"  data-toggle="modal" data-target="#likesModal" className="text-dark">
                                         <i className="fa fa-thumbs-up" aria-hidden="true">
                                             <span className="count">{Object.keys(post.likes).length}</span>
