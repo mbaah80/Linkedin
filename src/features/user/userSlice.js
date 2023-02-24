@@ -97,6 +97,19 @@ export const userSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
             })
+            .addCase(followUser.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(followUser.fulfilled, (state, action) => {
+                state.users = state.users.map(user => user._id === action.payload._id ? action.payload : user)
+                state.isLoading = false
+                state.isSuccess = true
+            })
+            .addCase(followUser.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
 
     }
 })

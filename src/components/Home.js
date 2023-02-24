@@ -10,7 +10,6 @@ let Home = () => {
 
     let location = useNavigate();
     const {user} = useSelector(state => state.auth)
-    console.log(user)
 
     useEffect(()=>{
         if(!user){

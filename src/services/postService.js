@@ -35,10 +35,45 @@ const getFeedPostsByUserId = async (token) =>{
         return response.data
 }
 
+const getSingleFeed = async (token) =>{
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    const response = await axios.get(baseUrl + 'posts/singlePost', config)
+    return response.data
+}
+
+const likePost = async (postId, token) =>{
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    const response = await axios.put(baseUrl + 'posts/like/' + postId, {},  config)
+    return response.data
+}
+
+const commentPost = async (newComment, token) =>{
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    const response = await axios.put(baseUrl + 'posts/comment/' + newComment.postId, {
+        comment: newComment.comment
+    },  config)
+    return response.data
+}
+
 const postService = {
     createPost,
     getFeedPosts,
-    getFeedPostsByUserId
+    getFeedPostsByUserId,
+    likePost,
+    getSingleFeed,
+    commentPost
 }
 
 export default postService

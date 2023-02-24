@@ -39,7 +39,14 @@
     display: flex;
     margin-bottom: 10px;
 }
-
+.PostReactions{
+    display: flex;
+    justify-content: space-between;
+}
+.avatarInfo{
+    display: grid;
+    grid-template-columns: 1fr;
+}
 .nameBtn{
     display: flex;
     justify-content: space-between !important;
@@ -298,6 +305,14 @@ textarea {
 }
 .followHolder{
     margin-left: auto !important;
+}
+.fa-thumbs-up:before {
+    content: "\f164";
+    color: #1d72c7;
+    margin-right: 3px;
+}
+.count{
+    color: #959494;
 }
 @media only screen and (max-width: 600px)  {
     .rightSidebar{

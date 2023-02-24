@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {useDropzone} from 'react-dropzone'
 import moment from 'moment';
-import {createPost, getFeedPosts, reset} from "../features/post/postSlice";
+import {createPost, getFeedPosts, likePost, commentPost,  reset} from "../features/post/postSlice";
 import {followUser} from "../features/user/userSlice";
 import Spinner from './spinner'
 import './sidebars/sidebars.css'
@@ -11,6 +11,7 @@ let HomeCard = () =>{
 
     const dispatch = useDispatch();
     const [message, setMessage] = useState('')
+    const [comment, setComment] = useState('')
     const [error, setError] = useState('')
 
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone({accept: 'image/*'});
@@ -49,6 +50,38 @@ let HomeCard = () =>{
         dispatch(followUser(userId))
     }
 
+    let likePostHanlder = (postId) =>{
+        dispatch(likePost(postId))
+    }
+    let sendPostHandler = async (post) =>{
+        try {
+            let newPost = {
+                text: post.message,
+                picturePath: post.picturePath,
+                userPicturePath: post.userPicturePath,
+                name: post.name,
+                occupation: post.occupation,
+                _id: post._id,
+                userId: post.userId,
+                url: post.url,
+            }
+           alert("will be implemented soon")
+        }catch (e) {
+            console.log(e)
+        }
+    }
+    let sendCommentHandler = async (postId) =>{
+        let newComment = {
+            comment: comment,
+            postId: postId,
+        }
+        if(comment.length > 0){
+            dispatch(commentPost(newComment))
+        }else{
+            alert("Please enter a comment")
+        }
+    }
+
 
     return(
         <div className="col-md-5 homeCard">
@@ -81,7 +114,7 @@ let HomeCard = () =>{
                                 {post.name !== user.user.name && <button onClick={() => followHandler(user.user._id)} className="btn btn-primary btn-sm"><i className="fa fa-plus" aria-hidden="true"></i> Follow</button>}
                             </span>
                         </div>
-                        <small>{post.occupation}</small> <br/>
+                        <small>{post.occupation}</small>
                         <small>{moment(post.createdAt).subtract(1, "days").fromNow()} <i className="fa fa-globe" aria-hidden="true"></i></small>
                         </div>
                         </div>
@@ -92,32 +125,38 @@ let HomeCard = () =>{
                             <img className="card-img-top" src={`http://localhost:3002/assets/${post.picturePath}`} alt={post.id}/>
                         </a>
                         <div className="card-body">
-                        <p>Reactions</p>
-                        <div className="feedContainer">
-                        <img src="https://media.istockphoto.com/id/1201144328/photo/smiling-black-man-in-suit-posing-on-studio-background.jpg?s=612x612&w=0&k=20&c=abcU_jcFCUgSkmpXAd5qfrsUFUcdv6oOMdtW2U-m_8g="  className="profileAvatarReaction" />
-
-                        <img src="https://media.istockphoto.com/id/1144287292/sv/foto/headshot-portr%C3%A4tt-av-lyckliga-blandade-race-afrikansk-flicka-som-b%C3%A4r-glas%C3%B6gon.jpg?s=612x612&w=0&k=20&c=IH-uSlqS8HTKja-AnkVAiHgzMKzHLxwR9seRIYFEOoo="  className="profileAvatarReaction" />
-
-                        <img src="https://cdn-0001.qstv.on.epicgames.com/juzhOzPEHhcYONEjHm/image/screen_comp.jpeg"  className="profileAvatarReaction" />
-
-                        <img src="http://cdn-media.backstage.com/files/media/edit/image/12611/original.jpg"  className="profileAvatarReaction" />
+                        <div className=" PostReactions">
+                            <small>
+                                {
+                                    <a href="javascript:void(0)"  data-toggle="modal" data-target="#likesModal" className="text-dark">
+                                        <i className="fa fa-thumbs-up" aria-hidden="true">
+                                            <span className="count">{Object.keys(post.likes).length}</span>
+                                        </i>
+                                    </a>
+                                }
+                            </small>
+                            <small>
+                                {
+                                    <a href="javascript:void(0)"  data-toggle="modal" data-target="#likesModal" className="text-dark">
+                                       comments <span className="count">{
+                                            Object.keys(post.comments).length
+                                    }</span>
+                                    </a>
+                                }
+                            </small>
                         </div>
                         </div>
                         <div className="card-footer">
-                        <a href="#" className="btn btn-default">
-                        <img src={`http://localhost:3002/profile/${user.user.picturePath}`}  className="profileAvatarPost" />
-                        <i className="fa fa-caret-down" aria-hidden="true"></i>
-                        </a>
-                        <a href="#" className="btn btn-default"><i className="fa fa-thumbs-o-up" aria-hidden="true"></i> Like</a>
+                        <button onClick={()=>likePostHanlder(post._id)} className="btn btn-default"><i className="fa fa-thumbs-o-up" aria-hidden="true"></i> Like</button>
                         <a href="#" className="btn btn-default"><i className="fa fa-comment-o" aria-hidden="true"></i> Comment</a>
                         <a href="#" className="btn btn-default"><i className="fa fa-refresh" aria-hidden="true"></i> Repost</a>
-                        <a href="#" className="btn btn-default"><i className="fa fa-paper-plane-o" aria-hidden="true"></i> Send</a>
+                        <a href="javascript:void(0)" onClick={()=>sendPostHandler(post)} className="btn btn-default"><i className="fa fa-paper-plane-o" aria-hidden="true"></i> Send</a>
                         </div>
                         <div className="feedContainer p-2 mt-2">
                         <img src={`http://localhost:3002/profile/${user.user.picturePath}`}  className="profileAvatar" />
                         <div className="writeComment">
-                        <input type="text" className="form-control" placeholder="Write a comment..." />
-                        <button className="btn btn-default btn-sm commentIcon"><i className="fa fa-smile-o" aria-hidden="true"></i></button>
+                        <input type="text" className="form-control" placeholder="Write a comment..." value={comment} onChange={(e)=>setComment(e.target.value)} />
+                        <button className="btn btn-default btn-sm commentIcon" onClick={()=>sendCommentHandler(post._id)}><i className="fa fa-smile-o" aria-hidden="true"></i></button>
                         <button className="btn btn-default btn-sm commentIcon"><i className="fa fa-picture-o" aria-hidden="true"></i></button>
                         </div>
                         </div>
@@ -125,7 +164,7 @@ let HomeCard = () =>{
                 ))
             }
 
-        <div className="modal fade bd-example-modal-lg"  role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div className="modal fade bd-example-modal-lg"  role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
             <div className="modal-dialog modal-lg" role="document">
                 <div className="modal-content">
                 <div className="modal-header">
@@ -169,6 +208,26 @@ let HomeCard = () =>{
                 </div>
                 </div>
             </div>
+        </div>
+
+            <div className="modal fade" id="likesModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Reactions</h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                           Likes Model
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     )
