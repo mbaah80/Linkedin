@@ -81,6 +81,9 @@ let HomeCard = () =>{
             alert("Please enter a comment")
         }
     }
+    let focusCommentInput = async (id) =>{
+        document.getElementById(id + "commentInput").focus();
+    }
 
 
     return(
@@ -150,14 +153,14 @@ let HomeCard = () =>{
                         </div>
                         <div className="card-footer">
                         <button onClick={()=>likePostHanlder(post._id)} className="btn btn-default"><i className="fa fa-thumbs-o-up" aria-hidden="true"></i> Like</button>
-                        <a href="#" className="btn btn-default"><i className="fa fa-comment-o" aria-hidden="true"></i> Comment</a>
+                        <a onClick={()=>focusCommentInput(post._id)} className="btn btn-default"><i className="fa fa-comment-o" aria-hidden="true"></i> Comment</a>
                         <a href="#" className="btn btn-default"><i className="fa fa-refresh" aria-hidden="true"></i> Repost</a>
                         <a href="javascript:void(0)" onClick={()=>sendPostHandler(post)} className="btn btn-default"><i className="fa fa-paper-plane-o" aria-hidden="true"></i> Send</a>
                         </div>
                         <div className="feedContainer p-2 mt-2">
                         <img src={`http://localhost:3002/profile/${user.user.picturePath}`}  className="profileAvatar" />
                         <div className="writeComment">
-                        <input type="text" className="form-control" placeholder="Write a comment..." value={comment} onChange={(e)=>setComment(e.target.value)} />
+                        <input type="text" className="form-control" id={post._id + `commentInput`} placeholder="Write a comment..." value={comment} onChange={(e)=>setComment(e.target.value)} />
                         <button className="btn btn-default btn-sm commentIcon" onClick={()=>sendCommentHandler(post._id)}><i className="fa fa-smile-o" aria-hidden="true"></i></button>
                         <button className="btn btn-default btn-sm commentIcon"><i className="fa fa-picture-o" aria-hidden="true"></i></button>
                         </div>
