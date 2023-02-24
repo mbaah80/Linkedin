@@ -137,6 +137,7 @@ let HomeCard = () =>{
                             </small>
                             <small>
                                 {
+                                    Object.keys(post.comments).length > 0 &&
                                     <a href="javascript:void(0)"  data-toggle="modal" data-target="#likesModal" className="text-dark">
                                        comments <span className="count">{
                                             Object.keys(post.comments).length
