@@ -314,6 +314,35 @@ textarea {
 .count{
     color: #959494;
 }
+.reportContainer{
+    padding: 10px 30px;
+    border-bottom: 1px solid #ebebeb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.reportContainer .fa{
+    color: #959494;
+    font-size: 18px;
+}
+.closePostBtn{
+    border-radius: 50%;
+}
+.closePostBtn:hover{
+    background-color: #ebebeb;
+    border-radius: 50%;
+}
+.repostUser{
+    display: flex;
+    align-items: center;
+}
+.profileAvatarRepost{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
 @media only screen and (max-width: 600px)  {
     .rightSidebar{
         display: none;

@@ -67,13 +67,35 @@ const commentPost = async (newComment, token) =>{
     return response.data
 }
 
+const deletePost = async (postId, token) =>{
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    const response = await axios.delete(baseUrl + 'posts/deletePost/' + postId, config)
+    return response.data
+}
+
+const rePost = async (postId, token) =>{
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    const response = await axios.post(baseUrl + 'posts/repost/' + postId, {},  config)
+    return response.data
+}
+
 const postService = {
     createPost,
     getFeedPosts,
     getFeedPostsByUserId,
     likePost,
     getSingleFeed,
-    commentPost
+    commentPost,
+    rePost,
+    deletePost
 }
 
 export default postService

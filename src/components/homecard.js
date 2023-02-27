@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {useDropzone} from 'react-dropzone'
 import moment from 'moment';
-import {createPost, getFeedPosts, likePost, commentPost,  reset} from "../features/post/postSlice";
+import {createPost, getFeedPosts, likePost, commentPost, rePost, deletePost,  reset} from "../features/post/postSlice";
 import {followUser} from "../features/user/userSlice";
 import Spinner from './spinner'
 import './sidebars/sidebars.css'
@@ -38,12 +38,15 @@ let HomeCard = () =>{
         <img className="card-img-top feedImage" key={file.path} src={URL.createObjectURL(file)} alt={file.name} />
     ));
     let postHandler = (e) =>{
-        e.preventDefault();
-
-        const postData = new FormData();
-        postData.append('message', message)
-        acceptedFiles.forEach(file => postData.append('picturePath', file));
-        dispatch(createPost(postData))
+        try {
+            e.preventDefault();
+            const postData = new FormData();
+            postData.append('message', message)
+            acceptedFiles.forEach(file => postData.append('picturePath', file));
+            dispatch(createPost(postData))
+        }catch (e) {
+            console.log(e)
+        }
     }
 
     let followHandler = (userId) =>{
@@ -84,6 +87,16 @@ let HomeCard = () =>{
     let focusCommentInput = async (id) =>{
         document.getElementById(id + "commentInput").focus();
     }
+    let repostHandler = async (postId) =>{
+        try {
+            dispatch(rePost(postId))
+        }catch (e) {
+            console.log(e)
+        }
+    }
+    let deleteRepostHandler = async (postId) =>{
+        dispatch(deletePost(postId))
+    }
 
 
     return(
@@ -108,6 +121,32 @@ let HomeCard = () =>{
             {
                 posts.map(post=>(
                     <div key={post._id} className="card mt-2 mb-2">
+                        {
+                            post.repostedBy  ?
+                                <div className="reportContainer" >
+                                   <div className="repostUser">
+                                       <img src={`http://localhost:3002/profile/${post.repostedBy.userPicturePath}`}  className="profileAvatarRepost" />
+                                       <small>{post.repostedBy.name}</small>
+                                   </div>
+                                    {
+                                        post.repostedBy.userId === user.user.id ?
+                                            <button className="btn btn-default btn-sm closePostBtn" onClick={()=>deleteRepostHandler(post._id)}><i className="fa " aria-hidden="true">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
+                                                     data-supported-dps="16x16" fill="currentColor" className="mercado-match"
+                                                     width="16" height="16" focusable="false">
+                                                    <path
+                                                        d="M14 3.41L9.41 8 14 12.59 12.59 14 8 9.41 3.41 14 2 12.59 6.59 8 2 3.41 3.41 2 8 6.59 12.59 2z"></path>
+                                                </svg>
+                                            </i>
+                                            </button>
+                                            : null
+                                    }
+
+                                </div>
+
+                                : null
+                        }
+
                         <div className="feedContainer mt-4 ml-4">
                         <img src={`http://localhost:3002/profile/${post.userPicturePath}`}  className="profileAvatar" />
                         <div className="avatarInfo">
@@ -154,7 +193,7 @@ let HomeCard = () =>{
                         <div className="card-footer">
                         <button onClick={()=>likePostHanlder(post._id)} className="btn btn-default"><i className="fa fa-thumbs-o-up" aria-hidden="true"></i> Like</button>
                         <a onClick={()=>focusCommentInput(post._id)} className="btn btn-default"><i className="fa fa-comment-o" aria-hidden="true"></i> Comment</a>
-                        <a href="#" className="btn btn-default"><i className="fa fa-refresh" aria-hidden="true"></i> Repost</a>
+                        <a href="javascript:void(0)" onClick={()=>repostHandler(post._id)} className="btn btn-default"><i className="fa fa-refresh" aria-hidden="true"></i> Repost</a>
                         <a href="javascript:void(0)" onClick={()=>sendPostHandler(post)} className="btn btn-default"><i className="fa fa-paper-plane-o" aria-hidden="true"></i> Send</a>
                         </div>
                         <div className="feedContainer p-2 mt-2">
