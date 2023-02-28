@@ -1,5 +1,6 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import postService from "../../services/postService";
+import produce from "immer";
 
 const initialState = {
     posts:  [],
@@ -10,7 +11,7 @@ const initialState = {
 }
 
 //Create Post Service
-export const createPost = createAsyncThunk('post/createPost', async(postData, thunkAPI)=>{
+export const createPost = createAsyncThunk('posts/createPost', async(postData, thunkAPI)=>{
     try {
         const token = thunkAPI.getState().auth.user.token
         return await postService.createPost(postData, token)
@@ -22,7 +23,7 @@ export const createPost = createAsyncThunk('post/createPost', async(postData, th
 
 
 //Get Feed Posts Service
-export const getFeedPosts = createAsyncThunk('post/getFeedPosts', async (_, thunkAPI)=>{
+export const getFeedPosts = createAsyncThunk('posts/getFeedPosts', async (_, thunkAPI)=>{
     try {
         const token = thunkAPI.getState().auth.user.token
         return await postService.getFeedPosts(token)
@@ -33,7 +34,7 @@ export const getFeedPosts = createAsyncThunk('post/getFeedPosts', async (_, thun
 })
 
 //Get Single Post Service
-export const getFeedPostsByUserId = createAsyncThunk('post/getFeedPostsByUserId', async (_, thunkAPI)=>{
+export const getFeedPostsByUserId = createAsyncThunk('posts/getFeedPostsByUserId', async (_, thunkAPI)=>{
     try {
         const token = thunkAPI.getState().auth.user.token
         return await postService.getFeedPostsByUserId(token)
@@ -44,7 +45,7 @@ export const getFeedPostsByUserId = createAsyncThunk('post/getFeedPostsByUserId'
 })
 
 //Get Single Post Service
-export const getSingleFeed = createAsyncThunk('post/getSingleFeed', async (postId, thunkAPI)=>{
+export const getSingleFeed = createAsyncThunk('posts/getSingleFeed', async (postId, thunkAPI)=>{
     try {
         const token = thunkAPI.getState().auth.user.token
         return await postService.getSingleFeed(postId, token)
@@ -55,7 +56,7 @@ export const getSingleFeed = createAsyncThunk('post/getSingleFeed', async (postI
 })
 
 //Liked Posts
-export const likePost = createAsyncThunk('post/likePost', async(postId, thunkAPI)=>{
+export const likePost = createAsyncThunk('posts/likePost', async(postId, thunkAPI)=>{
     try {
         const token = thunkAPI.getState().auth.user.token
         return await  postService.likePost(postId, token)
@@ -66,7 +67,7 @@ export const likePost = createAsyncThunk('post/likePost', async(postId, thunkAPI
 })
 
 //comment Posts
-export const commentPost = createAsyncThunk('post/commentPost', async(newComment, thunkAPI)=>{
+export const commentPost = createAsyncThunk('posts/commentPost', async(newComment, thunkAPI)=>{
     try {
         const token = thunkAPI.getState().auth.user.token
         return await  postService.commentPost(newComment,  token)
@@ -77,7 +78,7 @@ export const commentPost = createAsyncThunk('post/commentPost', async(newComment
 })
 
 //repost Posts
-export const rePost = createAsyncThunk('post/rePost', async(postId, thunkAPI)=>{
+export const rePost = createAsyncThunk('posts/rePost', async(postId, thunkAPI)=>{
     try {
         const token = thunkAPI.getState().auth.user.token
         return await  postService.rePost(postId,  token)
@@ -88,7 +89,7 @@ export const rePost = createAsyncThunk('post/rePost', async(postId, thunkAPI)=>{
 })
 
 //delete Posts
-export const deletePost = createAsyncThunk('post/deletePost', async(postId, thunkAPI)=>{
+export const deletePost = createAsyncThunk('posts/deletePost', async(postId, thunkAPI)=>{
     try {
         const token = thunkAPI.getState().auth.user.token
         return await  postService.deletePost(postId,  token)
@@ -113,7 +114,8 @@ export const postSlice = createSlice({
             .addCase(createPost.fulfilled, (state, action)=>{
                 state.isLoading = false
                 state.isSuccess = true
-                state.posts.push(action.payload)
+                state.message = action.payload.msg
+                state.posts.unshift(action.payload.post)
             })
             .addCase(createPost.rejected, (state, action)=>{
                 state.isLoading = false
@@ -165,7 +167,7 @@ export const postSlice = createSlice({
             .addCase(rePost.fulfilled, (state, action)=>{
                 state.isLoading = false
                 state.isSuccess = true
-                state.posts = state.posts.map((post)=> post._id === action.payload._id ? action.payload : post)
+                state.posts.unshift(action.payload.post)
             })
             .addCase(rePost.rejected,(state, action)=>{
                 state.isLoading = false
@@ -178,7 +180,9 @@ export const postSlice = createSlice({
             .addCase(deletePost.fulfilled, (state, action)=>{
                 state.isLoading = false
                 state.isSuccess = true
-                state.posts = state.posts.filter((post)=> post._id !== action.payload._id)
+                state.posts = state.posts.filter((post)=> {
+                    return post._id !== action.payload.post._id
+                })
             })
             .addCase(deletePost.rejected,(state, action)=>{
                 state.isLoading = false

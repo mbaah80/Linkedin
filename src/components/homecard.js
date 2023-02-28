@@ -14,6 +14,7 @@ let HomeCard = () =>{
     const [comment, setComment] = useState('')
     const [error, setError] = useState('')
 
+
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone({accept: 'image/*'});
 
 
@@ -21,18 +22,22 @@ let HomeCard = () =>{
     const {posts, isError, isSuccess, isLoading, message: msg} = useSelector((state) => state.post)
 
 
+
     useEffect(()=>{
         if(isError){
             setError(msg)
         }
-        if(isSuccess){
-            setMessage(msg)
-        }
-    },[user,isError, isSuccess, isLoading, msg, dispatch])
-
-    useEffect(() => {
+         dispatch(reset())
         dispatch(getFeedPosts())
-    }, [dispatch])
+        // return () => {
+        //     dispatch(reset())
+        // }
+    },[user,isError, msg, dispatch])
+
+    if(isLoading){
+        //return <Spinner class="loader"/>
+       // alert('loading')
+    }
 
     const files = acceptedFiles.map(file => (
         <img className="card-img-top feedImage" key={file.path} src={URL.createObjectURL(file)} alt={file.name} />
@@ -44,18 +49,12 @@ let HomeCard = () =>{
             postData.append('message', message)
             acceptedFiles.forEach(file => postData.append('picturePath', file));
             dispatch(createPost(postData))
+            setMessage('');
         }catch (e) {
             console.log(e)
         }
     }
 
-    let followHandler = (userId) =>{
-        dispatch(followUser(userId))
-    }
-
-    let likePostHanlder = (postId) =>{
-        dispatch(likePost(postId))
-    }
     let sendPostHandler = async (post) =>{
         try {
             let newPost = {
@@ -80,22 +79,13 @@ let HomeCard = () =>{
         }
         if(comment.length > 0){
             dispatch(commentPost(newComment))
+            setComment('')
         }else{
             alert("Please enter a comment")
         }
     }
     let focusCommentInput = async (id) =>{
         document.getElementById(id + "commentInput").focus();
-    }
-    let repostHandler = async (postId) =>{
-        try {
-            dispatch(rePost(postId))
-        }catch (e) {
-            console.log(e)
-        }
-    }
-    let deleteRepostHandler = async (postId) =>{
-        dispatch(deletePost(postId))
     }
 
 
@@ -119,18 +109,18 @@ let HomeCard = () =>{
            </div>
 
             {
-                posts.map(post=>(
+                posts.length > 0 ? (posts.map(post=>(
                     <div key={post._id} className="card mt-2 mb-2">
                         {
                             post.repostedBy  ?
-                                <div className="reportContainer" >
-                                   <div className="repostUser">
-                                       <img src={`http://localhost:3002/profile/${post.repostedBy.userPicturePath}`}  className="profileAvatarRepost" />
-                                       <small>{post.repostedBy.name}</small>
-                                   </div>
+                                <div className="reportContainer" key={post.repostedBy._id} >
+                                    <div className="repostUser">
+                                        <img src={`http://localhost:3002/profile/${post.repostedBy.userPicturePath}`}  className="profileAvatarRepost" />
+                                        <small>{post.repostedBy.name}</small>
+                                    </div>
                                     {
                                         post.repostedBy.userId === user.user.id ?
-                                            <button className="btn btn-default btn-sm closePostBtn" onClick={()=>deleteRepostHandler(post._id)}><i className="fa " aria-hidden="true">
+                                            <button className="btn btn-default btn-sm closePostBtn" onClick={()=> dispatch(deletePost(post._id))}><i className="fa " aria-hidden="true">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
                                                      data-supported-dps="16x16" fill="currentColor" className="mercado-match"
                                                      width="16" height="16" focusable="false">
@@ -148,17 +138,32 @@ let HomeCard = () =>{
                         }
 
                         <div className="feedContainer mt-4 ml-4">
-                        <img src={`http://localhost:3002/profile/${post.userPicturePath}`}  className="profileAvatar" />
-                        <div className="avatarInfo">
-                        <div className="nameBtn secondNameFollowHolder ">
-                            <a href="#" className="text-dark">{post.name}</a>
-                            <span className="followHolder">
-                                {post.name !== user.user.name && <button onClick={() => followHandler(user.user._id)} className="btn btn-primary btn-sm"><i className="fa fa-plus" aria-hidden="true"></i> Follow</button>}
+                            <img src={`http://localhost:3002/profile/${post.userPicturePath}`}  className="profileAvatar" />
+                            <div className="avatarInfo">
+                                <div className="nameBtn secondNameFollowHolder ">
+                                    <a href="#" className="text-dark">{post.name}</a>
+                                    <span className="followHolder">
+                                {post.name !== user.user.name && <button onClick={() => dispatch(followUser(user.user._id))} className="btn btn-primary btn-sm"><i className="fa fa-plus" aria-hidden="true"></i> Follow</button>}
                             </span>
-                        </div>
-                        <small>{post.occupation}</small>
-                        <small>{moment(post.createdAt).subtract(1, "days").fromNow()} <i className="fa fa-globe" aria-hidden="true"></i></small>
-                        </div>
+                                    <span className="ml-auto">
+                                         {
+                                             post.userId === user.user.id ?
+                                                 <button className="btn btn-default btn-sm closePostBtn" onClick={()=> dispatch(deletePost(post._id))}><i className="fa " aria-hidden="true">
+                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
+                                                          data-supported-dps="16x16" fill="currentColor" className="mercado-match"
+                                                          width="16" height="16" focusable="false">
+                                                         <path
+                                                             d="M14 3.41L9.41 8 14 12.59 12.59 14 8 9.41 3.41 14 2 12.59 6.59 8 2 3.41 3.41 2 8 6.59 12.59 2z"></path>
+                                                     </svg>
+                                                 </i>
+                                                 </button>
+                                                 : null
+                                         }
+                                    </span>
+                                </div>
+                                <small>{post.occupation}</small>
+                                <small>{moment(post.createdAt).subtract(1, "days").fromNow()} <i className="fa fa-globe" aria-hidden="true"></i></small>
+                            </div>
                         </div>
                         <p className="Post">
                             {post.message.slice(0, 100)} <a href="#" className="text-dark ml-2">...see more</a>
@@ -167,45 +172,57 @@ let HomeCard = () =>{
                             <img className="card-img-top" src={`http://localhost:3002/assets/${post.picturePath}`} alt={post.id}/>
                         </a>
                         <div className="card-body">
-                        <div className=" PostReactions">
-                            <small>
+                            <div className=" PostReactions">
                                 {
-                                    Object.keys(post.likes).length > 0 &&
-                                    <a href="javascript:void(0)"  data-toggle="modal" data-target="#likesModal" className="text-dark">
-                                        <i className="fa fa-thumbs-up" aria-hidden="true">
-                                            <span className="count">{Object.keys(post.likes).length}</span>
-                                        </i>
-                                    </a>
+                                    post.likes  ? ( <small>
+                                        {
+                                            Object.keys(post.likes).length > 0 &&
+                                            <a href="javascript:void(0)"  data-toggle="modal" data-target="#likesModal" className="text-dark">
+                                                <i className="fa fa-thumbs-up" aria-hidden="true">
+                                                    <span className="count">{Object.keys(post.likes).length}</span>
+                                                </i>
+                                            </a>
+                                        }
+                                    </small>) : (
+                                        <small>
+                                            No likes yet
+                                        </small>
+                                    )
                                 }
-                            </small>
-                            <small>
                                 {
-                                    Object.keys(post.comments).length > 0 &&
-                                    <a href="javascript:void(0)"  data-toggle="modal" data-target="#likesModal" className="text-dark">
-                                       comments <span className="count">{
-                                            Object.keys(post.comments).length
-                                    }</span>
-                                    </a>
+                                    post.comments  ? (<small>
+                                        {
+                                            Object.keys(post.comments).length > 0 &&
+                                            <a href="javascript:void(0)"  data-toggle="modal" data-target="#likesModal" className="text-dark">
+                                                comments <span className="count">{
+                                                Object.keys(post.comments).length
+                                            }</span>
+                                            </a>
+                                        }
+                                    </small>) : null
                                 }
-                            </small>
-                        </div>
+                            </div>
                         </div>
                         <div className="card-footer">
-                        <button onClick={()=>likePostHanlder(post._id)} className="btn btn-default"><i className="fa fa-thumbs-o-up" aria-hidden="true"></i> Like</button>
-                        <a onClick={()=>focusCommentInput(post._id)} className="btn btn-default"><i className="fa fa-comment-o" aria-hidden="true"></i> Comment</a>
-                        <a href="javascript:void(0)" onClick={()=>repostHandler(post._id)} className="btn btn-default"><i className="fa fa-refresh" aria-hidden="true"></i> Repost</a>
-                        <a href="javascript:void(0)" onClick={()=>sendPostHandler(post)} className="btn btn-default"><i className="fa fa-paper-plane-o" aria-hidden="true"></i> Send</a>
+                            <button onClick={()=> dispatch(likePost(post._id))} className="btn btn-default"><i className="fa fa-thumbs-o-up" aria-hidden="true"></i> Like</button>
+                            <a onClick={()=>focusCommentInput(post._id)} className="btn btn-default"><i className="fa fa-comment-o" aria-hidden="true"></i> Comment</a>
+                            <a href="javascript:void(0)" onClick={()=>dispatch(rePost(post._id))} className="btn btn-default"><i className="fa fa-refresh" aria-hidden="true"></i> Repost</a>
+                            <a href="javascript:void(0)" onClick={()=>sendPostHandler(post)} className="btn btn-default"><i className="fa fa-paper-plane-o" aria-hidden="true"></i> Send</a>
                         </div>
                         <div className="feedContainer p-2 mt-2">
-                        <img src={`http://localhost:3002/profile/${user.user.picturePath}`}  className="profileAvatar" />
-                        <div className="writeComment">
-                        <input type="text" className="form-control" id={post._id + `commentInput`} placeholder="Write a comment..." value={comment} onChange={(e)=>setComment(e.target.value)} />
-                        <button className="btn btn-default btn-sm commentIcon" onClick={()=>sendCommentHandler(post._id)}><i className="fa fa-smile-o" aria-hidden="true"></i></button>
-                        <button className="btn btn-default btn-sm commentIcon"><i className="fa fa-picture-o" aria-hidden="true"></i></button>
-                        </div>
+                            <img src={`http://localhost:3002/profile/${user.user.picturePath}`}  className="profileAvatar" />
+                            <div className="writeComment">
+                                <input type="text" className="form-control" id={post._id + `commentInput`} placeholder="Write a comment..." value={comment} onChange={(e)=>setComment(e.target.value)} />
+                                <button className="btn btn-default btn-sm commentIcon" onClick={()=>sendCommentHandler(post._id)}><i className="fa fa-smile-o" aria-hidden="true"></i></button>
+                                <button className="btn btn-default btn-sm commentIcon"><i className="fa fa-picture-o" aria-hidden="true"></i></button>
+                            </div>
                         </div>
                     </div>
-                ))
+                ))) : (
+                    <div className="alert alert-secondary text-center noFeedsContainer mt-2" role="alert">
+                        No feeds yet
+                    </div>
+                )
             }
 
             <div className="modal fade bd-example-modal-lg"  role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">

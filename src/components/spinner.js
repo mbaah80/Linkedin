@@ -1,7 +1,10 @@
 
 let Spinner = () =>{
     return (
-        <div className="spinner-border text-secondary" role="status">
+        <div className="spinner-fullscreen">
+            <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden"></span>
+            </div>
         </div>
     )
 }
