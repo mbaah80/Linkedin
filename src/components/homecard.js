@@ -18,7 +18,7 @@ let HomeCard = () =>{
 
 
     const { getRootProps, getInputProps } = useDropzone({
-        accept: 'image/*',
+        acceptedFiles: "image/*, video/*",
         maxFiles: 1,
         onDrop: files => {
             setAcceptedFiles(files);
@@ -47,9 +47,13 @@ let HomeCard = () =>{
        // alert('loading')
     }
 
-    const files = acceptedFiles.map(file => (
-       <img className="card-img-top feedImage" id='file' key={file.path} src={URL.createObjectURL(file)} alt={file.name} />
-    ));
+    const files = acceptedFiles.map((file) => {
+        if(file.type === 'image/jpeg' || file.type === 'image/png'){
+           return  <img className="card-img-top feedImage" id='file' key={file.path} src={URL.createObjectURL(file)} alt={file.name} />
+        }else{
+            return <video className="card-img-top feedImage" src={URL.createObjectURL(file)} autoPlay={true}  key={file.name} />
+        }
+        });
     let postHandler = async (e) =>{
         try {
             e.preventDefault();
@@ -185,7 +189,12 @@ let HomeCard = () =>{
                             {post.message}
                         </p>
                         <a href="#" className="text-dark">
-                            <img className="card-img-top" src={`http://localhost:3002/assets/${post.picturePath}`} alt={post.id}/>
+                            { post.picturePath.endsWith('.jpg') || post.picturePath.endsWith('.jpeg') || post.picturePath.endsWith('.png')
+                                ? (
+                                <img className="card-img-top" src={`http://localhost:3002/assets/${post.picturePath}`} alt={post.id} />
+                            ) : (
+                                <video className="card-img-top" controls autoPlay={true} src={`http://localhost:3002/assets/${post.picturePath}`}></video>
+                            )}
                         </a>
                         <div className="card-body">
                             <div className=" PostReactions">
