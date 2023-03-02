@@ -46,6 +46,7 @@
 .avatarInfo{
     display: grid;
     grid-template-columns: 1fr;
+    width: 100%;
 }
 .nameBtn{
     display: flex;
@@ -87,6 +88,7 @@ small{
     border-bottom-left-radius: 14px;
     border-bottom-right-radius: 14px;
     padding: 1px !important;
+    width: 100% !important;
 }
 .homeCard .card-footer .btn-default{
     display: flex;
@@ -184,7 +186,7 @@ b{
     border: 1px solid #9b9b9b;
     border-radius: 40px;
     color: #9b9b9b;
-    width: 350px !important;
+    width: 100% !important;
     text-align: left;
     height: 50px;
 }
@@ -237,12 +239,12 @@ b{
     width: 100%;
 }
 .commentIcon{
-    border-radius: 40%;
-    font-size: 20px;
+    font-size: 14px;
+    border-radius: 20px;
+    background-color: #47baea;
+    border: none;
 }
-.commentIcon:hover{
-    background-color: #ebebeb;
-}
+
 .userProfileImg{
     display: flex;
     align-items: center;
@@ -354,6 +356,36 @@ textarea {
 .noFeedsContainer{
     border-radius: 14px;
     border: none;
+}
+.commentDiv{
+    background-color: #f2f2f2;
+    padding: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: inline-block !important;
+    width: 90% !important;
+}
+.commentUser{
+    display: flex;
+    width: 100%;
+}
+.commentDiv span{
+    font-size: 12px;
+    display: block;
+}
+.commentUserOccupation{
+    color: #9d9d9d;
+    margin-bottom: 5px;
+}
+.commentContainer{
+    padding: 5px 10px;
+    margin-bottom: 10px;
+}
+.commentAction{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 @media only screen and (max-width: 600px)  {
     .rightSidebar{

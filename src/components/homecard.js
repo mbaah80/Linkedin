@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {useDropzone} from 'react-dropzone'
 import moment from 'moment';
-import {createPost, getFeedPosts, likePost, commentPost, rePost, deletePost,  reset} from "../features/post/postSlice";
+import {createPost, getFeedPosts, likePost, commentPost, rePost, deletePost, deleteComment,  reset} from "../features/post/postSlice";
 import {followUser} from "../features/user/userSlice";
 import Spinner from './spinner'
 import './sidebars/sidebars.css'
@@ -12,26 +12,34 @@ let HomeCard = () =>{
     const dispatch = useDispatch();
     const [message, setMessage] = useState('')
     const [comment, setComment] = useState('')
+    const [acceptedFiles, setAcceptedFiles] = useState([]);
+    const [dropzoneKey, setDropzoneKey] = useState(0);
     const [error, setError] = useState('')
 
 
-    const {acceptedFiles, getRootProps, getInputProps} = useDropzone({accept: 'image/*'});
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: 'image/*',
+        maxFiles: 1,
+        onDrop: files => {
+            setAcceptedFiles(files);
+            setDropzoneKey(dropzoneKey + 1);
+        },
+        maxSize: 5000000 // limit image size to 5MB
+    });
 
 
     const {user} = useSelector(state => state.auth)
-    const {posts, isError, isSuccess, isLoading, message: msg} = useSelector((state) => state.post)
-
-
+    const {posts,  isError, isSuccess, isLoading, message: msg} = useSelector(state => state.post)
 
     useEffect(()=>{
         if(isError){
             setError(msg)
         }
          dispatch(reset())
-        dispatch(getFeedPosts())
-        // return () => {
-        //     dispatch(reset())
-        // }
+         dispatch(getFeedPosts())
+        return () => {
+            dispatch(reset())
+        }
     },[user,isError, msg, dispatch])
 
     if(isLoading){
@@ -40,16 +48,18 @@ let HomeCard = () =>{
     }
 
     const files = acceptedFiles.map(file => (
-        <img className="card-img-top feedImage" key={file.path} src={URL.createObjectURL(file)} alt={file.name} />
+       <img className="card-img-top feedImage" id='file' key={file.path} src={URL.createObjectURL(file)} alt={file.name} />
     ));
-    let postHandler = (e) =>{
+    let postHandler = async (e) =>{
         try {
             e.preventDefault();
             const postData = new FormData();
             postData.append('message', message)
             acceptedFiles.forEach(file => postData.append('picturePath', file));
-            dispatch(createPost(postData))
+            await dispatch(createPost(postData))
+
             setMessage('');
+            setAcceptedFiles([]);
         }catch (e) {
             console.log(e)
         }
@@ -87,6 +97,13 @@ let HomeCard = () =>{
     let focusCommentInput = async (id) =>{
         document.getElementById(id + "commentInput").focus();
     }
+    let deleteCommentHandler = async (postId, commentId) =>{
+        let commentData = {
+            postId: postId,
+            commentId: commentId,
+        }
+        dispatch(deleteComment(commentData))
+    }
 
 
     return(
@@ -100,10 +117,10 @@ let HomeCard = () =>{
                     </div>
                 </div>
                 <div className="card-footer startPostFooter">
-                    <a href="#" className="btn btn-default"><i className="fa fa-picture-o" aria-hidden="true"></i> Photo</a>
-                    <a href="#" className="btn btn-default"><i className="fa fa-file-video-o" aria-hidden="true"></i> Video</a>
-                    <a href="#" className="btn btn-default"><i className="fa fa-calendar-check-o" aria-hidden="true"></i> Event</a>
-                    <a href="#" className="btn btn-default"><i className="fa fa-newspaper-o" aria-hidden="true"></i> Write article</a>
+                    <a href="javascript:void(0)" data-toggle="modal" data-target=".bd-example-modal-lg" className="btn btn-default"><i className="fa fa-picture-o" aria-hidden="true"></i> Photo</a>
+                    <a href="javascript:void(0)" data-toggle="modal" data-target=".bd-example-modal-lg" className="btn btn-default"><i className="fa fa-file-video-o" aria-hidden="true"></i> Video</a>
+                    <a href="javascript:void(0)" className="btn btn-default"><i className="fa fa-calendar-check-o" aria-hidden="true"></i> Event</a>
+                    <a href="javascript:void(0)" className="btn btn-default"><i className="fa fa-newspaper-o" aria-hidden="true"></i> Write article</a>
             </div>
             </div>
            </div>
@@ -131,7 +148,6 @@ let HomeCard = () =>{
                                             </button>
                                             : null
                                     }
-
                                 </div>
 
                                 : null
@@ -145,28 +161,28 @@ let HomeCard = () =>{
                                     <span className="followHolder">
                                 {post.name !== user.user.name && <button onClick={() => dispatch(followUser(user.user._id))} className="btn btn-primary btn-sm"><i className="fa fa-plus" aria-hidden="true"></i> Follow</button>}
                             </span>
-                                    <span className="ml-auto">
-                                         {
-                                             post.userId === user.user.id ?
-                                                 <button className="btn btn-default btn-sm closePostBtn" onClick={()=> dispatch(deletePost(post._id))}><i className="fa " aria-hidden="true">
-                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
-                                                          data-supported-dps="16x16" fill="currentColor" className="mercado-match"
-                                                          width="16" height="16" focusable="false">
-                                                         <path
-                                                             d="M14 3.41L9.41 8 14 12.59 12.59 14 8 9.41 3.41 14 2 12.59 6.59 8 2 3.41 3.41 2 8 6.59 12.59 2z"></path>
-                                                     </svg>
-                                                 </i>
-                                                 </button>
-                                                 : null
-                                         }
-                                    </span>
+                                    {/*<span className="ml-auto text-dark">*/}
+                                    {/*     {*/}
+                                    {/*         post.userId === user.user.id ?*/}
+                                    {/*             <button className="btn btn-default btn-sm closePostBtn" onClick={()=> dispatch(deletePost(post._id))}><i className="fa " aria-hidden="true">*/}
+                                    {/*                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"*/}
+                                    {/*                      data-supported-dps="16x16" fill="currentColor" className="mercado-match"*/}
+                                    {/*                      width="16" height="16" focusable="false">*/}
+                                    {/*                     <path*/}
+                                    {/*                         d="M14 3.41L9.41 8 14 12.59 12.59 14 8 9.41 3.41 14 2 12.59 6.59 8 2 3.41 3.41 2 8 6.59 12.59 2z"></path>*/}
+                                    {/*                 </svg>*/}
+                                    {/*             </i>*/}
+                                    {/*             </button>*/}
+                                    {/*             : null*/}
+                                    {/*     }*/}
+                                    {/*</span>*/}
                                 </div>
                                 <small>{post.occupation}</small>
                                 <small>{moment(post.createdAt).subtract(1, "days").fromNow()} <i className="fa fa-globe" aria-hidden="true"></i></small>
                             </div>
                         </div>
                         <p className="Post">
-                            {post.message.slice(0, 100)} <a href="#" className="text-dark ml-2">...see more</a>
+                            {post.message}
                         </p>
                         <a href="#" className="text-dark">
                             <img className="card-img-top" src={`http://localhost:3002/assets/${post.picturePath}`} alt={post.id}/>
@@ -213,9 +229,30 @@ let HomeCard = () =>{
                             <img src={`http://localhost:3002/profile/${user.user.picturePath}`}  className="profileAvatar" />
                             <div className="writeComment">
                                 <input type="text" className="form-control" id={post._id + `commentInput`} placeholder="Write a comment..." value={comment} onChange={(e)=>setComment(e.target.value)} />
-                                <button className="btn btn-default btn-sm commentIcon" onClick={()=>sendCommentHandler(post._id)}><i className="fa fa-smile-o" aria-hidden="true"></i></button>
-                                <button className="btn btn-default btn-sm commentIcon"><i className="fa fa-picture-o" aria-hidden="true"></i></button>
+                                <button className="btn btn-primary btn-sm commentIcon" disabled={!comment} onClick={()=>sendCommentHandler(post._id)}>Post</button>
                             </div>
+                        </div>
+                        <div className="comments">
+                            {
+                                post.comments  ? post.comments.map((comment) => (
+                                    <div className="commentContainer" key={comment._id} >
+                                        <div className="commentUser">
+                                            <img src={`http://localhost:3002/profile/${comment.userPicturePath}`}  className="profileAvatar" />
+                                          <span className="commentDiv">
+                                                <div className="commentAction">
+                                                    <span className="text-dark font-weight-bold">{comment.name} <small>{moment(comment.date).subtract(1, "days").fromNow()}</small></span>
+                                                    <span>
+                                                        <button className="btn btn-default btn-small" onClick={()=>deleteCommentHandler(post._id, comment._id)}>
+                                                            <i className="fa fa-trash-o" aria-hidden="true"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                                 <span className="commentUserOccupation">{comment.occupation}</span>
+                                                <span>{comment.comment}</span>
+                                          </span>
+                                        </div>
+                                    </div> )) : null
+                            }
                         </div>
                     </div>
                 ))) : (
@@ -225,8 +262,8 @@ let HomeCard = () =>{
                 )
             }
 
-            <div className="modal fade bd-example-modal-lg"  role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-            <div className="modal-dialog modal-lg" role="document">
+            <div  className="modal fade bd-example-modal-lg"  role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+               <div className="modal-dialog modal-lg" role="document">
                 <div className="modal-content">
                 <div className="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Create a post</h5>
@@ -264,12 +301,12 @@ let HomeCard = () =>{
                     </div>
                     <div>
                         <button type="button" className="btn btn-default" ><i className="fa fa-clock-o" aria-hidden="true"></i></button>
-                        <button type="button" disabled={!message }  className="btn btn-default  postBtn" onClick={postHandler}>Post</button>
+                        <button type="button" data-dismiss="modal" disabled={!message }  className="btn btn-default  postBtn" onClick={postHandler}>Post</button>
                     </div>
                 </div>
                 </div>
             </div>
-        </div>
+            </div>
 
             <div className="modal fade" id="likesModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog" role="document">
@@ -281,11 +318,7 @@ let HomeCard = () =>{
                             </button>
                         </div>
                         <div className="modal-body">
-                           Likes Model
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary">Save changes</button>
+                           Feature Coming Soon
                         </div>
                     </div>
                 </div>

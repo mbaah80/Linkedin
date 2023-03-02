@@ -77,6 +77,16 @@ const deletePost = async (postId, token) =>{
     return response.data
 }
 
+const deleteComment = async (commentData, token) =>{
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    const response = await axios.delete(baseUrl + 'posts/deleteComment/' + commentData.postId + '/comments/' + commentData.commentId, config)
+    return response.data
+}
+
 const rePost = async (postId, token) =>{
     const config = {
         headers: {
@@ -95,7 +105,8 @@ const postService = {
     getSingleFeed,
     commentPost,
     rePost,
-    deletePost
+    deletePost,
+    deleteComment
 }
 
 export default postService

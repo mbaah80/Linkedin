@@ -1,12 +1,13 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import postService from "../../services/postService";
-import produce from "immer";
+
 
 const initialState = {
     posts:  [],
     isError: false,
     isSuccess: false,
     isLoading: false,
+    isOpen: false,
     message: ''
 }
 
@@ -99,12 +100,23 @@ export const deletePost = createAsyncThunk('posts/deletePost', async(postId, thu
     }
 })
 
+//delete comment
+export const deleteComment = createAsyncThunk('posts/deleteComment', async(commentData, thunkAPI)=>{
+    try {
+        const token = thunkAPI.getState().auth.user.token
+        return await  postService.deleteComment(commentData,  token)
+    }catch (e) {
+        const message = (e.response && e.response.data && e.response.data.msg) || e.msg || e.toString();
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 
 export const postSlice = createSlice({
     name: 'post',
     initialState,
     reducers:{
-        reset: (state) => initialState
+        reset: (state) => initialState,
     },
     extraReducers:(builder) =>{
         builder
@@ -189,8 +201,21 @@ export const postSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
             })
+            .addCase(deleteComment.pending, (state)=>{
+                state.isLoading = true
+            })
+            .addCase(deleteComment.fulfilled, (state, action)=>{
+                state.isLoading = false
+                state.isSuccess = true
+                state.posts = state.posts.map((post)=> post._id === action.payload._id ? action.payload : post)
+            })
+            .addCase(deleteComment.rejected, (state, action)=>{
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
     }
 })
 
-export const {reset} = postSlice.actions
+export const {reset, closeModal} = postSlice.actions
 export default postSlice.reducer

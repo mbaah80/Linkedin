@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import userService  from "../../services/userService";
-import {defaults} from "axios";
 
 const initialState = {
     users: [],
@@ -101,9 +100,11 @@ export const userSlice = createSlice({
                 state.isLoading = true
             })
             .addCase(followUser.fulfilled, (state, action) => {
-                state.users = state.users.map(user => user._id === action.payload._id ? action.payload : user)
                 state.isLoading = false
                 state.isSuccess = true
+                state.users = state.users.map(user => user._id === action.payload._id ? action.payload : user)
+                console.log(action.payload,  'followUser')
+                console.log(state.users, 'users follow')
             })
             .addCase(followUser.rejected, (state, action) => {
                 state.isLoading = false
