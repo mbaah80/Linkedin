@@ -96,17 +96,91 @@ input{
 }
 
 @media only screen and (max-width: 600px) {
-    .loginContainer{
-        height: 100%;
+    .loginContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
-    .loginLeftContainer{
+
+    .loginLeftContainer {
         display: none;
     }
-    .loginContainer .card{
+
+    .loginContainer .card {
         width: 100%;
         border-radius: 0px;
     }
-    .rowBackgroundImg{
+
+    .rowBackgroundImg {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .loginContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .loginLeftContainer {
+        display: none;
+    }
+
+    .loginContainer .card {
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .rowBackgroundImg {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .registerContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .loginContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .loginLeftContainer {
+        display: none;
+    }
+
+    .loginContainer .card {
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .rowBackgroundImg {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .registerContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .loginContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .loginContainer .card {
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .rowBackgroundImg {
         display: none;
     }
 }
