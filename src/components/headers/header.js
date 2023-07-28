@@ -65,7 +65,7 @@ let Header = () => {
                         </li>
                         <li className="nav-item">
                             <a className="nav-link d-flex align-items-center" href="#">
-                                <img src={`http://localhost:3002/profile/${user.user.picturePath}`} className="profileAvatarPost"/>
+                                <img src={`http://localhost:3002/profile/${user && user.user.picturePath}`} className="profileAvatarPost"/>
                                 <b>{user && user.user.name}</b>
                             </a>
                         </li>

@@ -115,7 +115,7 @@ let HomeCard = () =>{
            <div className="card">
             <div className="card-body">
                 <div className="feedContainer">
-                    <img src={`http://localhost:3002/profile/${user.user.picturePath}`}  className="profileAvatar" />
+                    <img src={`http://localhost:3002/profile/${user && user.user.picturePath}`}  className="profileAvatar" alt="image" />
                     <div className="avatarInfo">
                         <button className="btn btn-primary btn-sm SearchBtn" data-toggle="modal" data-target=".bd-example-modal-lg">Start a post</button>
                     </div>
@@ -136,7 +136,7 @@ let HomeCard = () =>{
                             post.repostedBy  ?
                                 <div className="reportContainer" key={post.repostedBy._id} >
                                     <div className="repostUser">
-                                        <img src={`http://localhost:3002/profile/${post.repostedBy.userPicturePath}`}  className="profileAvatarRepost" />
+                                        <img src={`http://localhost:3002/profile/${post.repostedBy.userPicturePath}`}  className="profileAvatarRepost" alt="image" />
                                         <small>{post.repostedBy.name}</small>
                                     </div>
                                     {
@@ -188,14 +188,15 @@ let HomeCard = () =>{
                         <p className="Post">
                             {post.message}
                         </p>
-                        <a href="#" className="text-dark">
-                            { post.picturePath.endsWith('.jpg') || post.picturePath.endsWith('.jpeg') || post.picturePath.endsWith('.png')
-                                ? (
-                                <img className="card-img-top" src={`http://localhost:3002/assets/${post.picturePath}`} alt={post.id} />
-                            ) : (
-                                <video className="card-img-top" controls autoPlay={true} src={`http://localhost:3002/assets/${post.picturePath}`}></video>
-                            )}
-                        </a>
+                        {post && post.picturePath && (
+                            <a href="#" className="text-dark">
+                                {post.picturePath.endsWith('.jpg') || post.picturePath.endsWith('.jpeg') || post.picturePath.endsWith('.png') ? (
+                                    <img className="card-img-top" src={`http://localhost:3002/assets/${post.picturePath}`} alt={post.id} />
+                                ) : (
+                                    <video className="card-img-top" controls autoPlay={true} src={`http://localhost:3002/assets/${post.picturePath}`}></video>
+                                )}
+                            </a>
+                        )}
                         <div className="card-body">
                             <div className=" PostReactions">
                                 {
@@ -246,7 +247,7 @@ let HomeCard = () =>{
                                 post.comments  ? post.comments.map((comment) => (
                                     <div className="commentContainer" key={comment._id} >
                                         <div className="commentUser">
-                                            <img src={`http://localhost:3002/profile/${comment.userPicturePath}`}  className="profileAvatar" />
+                                            <img src={`http://localhost:3002/profile/${comment.userPicturePath}`}  className="profileAvatar" alt="image" />
                                           <span className="commentDiv">
                                                 <div className="commentAction">
                                                     <span className="text-dark font-weight-bold">{comment.name} <small>{moment(comment.date).subtract(1, "days").fromNow()}</small></span>
@@ -283,8 +284,8 @@ let HomeCard = () =>{
                 <div className="modal-body">
                     {error && <div className="alert alert-danger">{error}</div>}
                 <div className="feedContainer">
-                    <img src={`http://localhost:3002/profile/${user.user.picturePath}`}  className="profileAvatar" />
-                    <button className="btn btn-default btn-sm modalBtn mt-1"><i className="fa fa-street-view" aria-hidden="true"></i> {user.user.name} <i className="fa fa-caret-down" aria-hidden="true"></i></button>
+                    <img src={`http://localhost:3002/profile/${user && user.user.picturePath}`}  className="profileAvatar" />
+                    <button className="btn btn-default btn-sm modalBtn mt-1"><i className="fa fa-street-view" aria-hidden="true"></i> {user && user.user.name} <i className="fa fa-caret-down" aria-hidden="true"></i></button>
                     <button className="btn btn-default btn-sm modalBtn mt-1"><i className="fa fa-globe" aria-hidden="true"></i> Anyone <i className="fa fa-caret-down" aria-hidden="true"></i></button>
                 </div>
                     <textarea type="text"  className=" mt-2 textAreaBorder" placeholder="What's on your mind?" value={message} onChange={(e)=>setMessage(e.target.value)} />

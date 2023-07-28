@@ -2,7 +2,7 @@ import { Routes, Route, Link, BrowserRouter } from 'react-router-dom';
 import './App.css';
 import Login from './components/login';
 import Register from './components/register';
-import Home from './components/home'
+import Home from './components/Home'
 import Network from './components/networks/network'
 import Jobs from './components/jobs/jobs';
 import Notification  from "./components/notifications/notification";

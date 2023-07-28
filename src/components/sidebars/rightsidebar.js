@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {getAllUsers, followUser} from "../../features/user/userSlice";
 import './sidebars.css'
@@ -9,7 +9,16 @@ let Rightsidebar = () =>{
     const users = useSelector(state => state.user.users)
     const loggedInUser = useSelector(state => state.auth.user)
 
-    const otherUsers = users.filter(user => user._id !== loggedInUser.user.id);
+    let otherUsers = [];
+    if (loggedInUser && loggedInUser.user && loggedInUser.user.id) {
+        otherUsers = users.filter(user => user._id !== loggedInUser.user.id);
+    } else {
+        // Handle the case when the user is not logged in.
+        // For example, set otherUsers to the original users list or an empty array.
+        // otherUsers = users;
+        // OR
+        // otherUsers = [];
+    }
 
     const filteredUser =  otherUsers.filter(user => {
         if (loggedInUser.user._id === user._id) {
@@ -29,7 +38,7 @@ let Rightsidebar = () =>{
     return(
        <div className="col-md-4 rightSidebar">
            {
-               filteredUser.length > 0  ? (<div className="card" >
+               filteredUser &&    filteredUser.length > 0  ? (<div className="card" >
                            <div className="card-body">
                                <h5 className="card-title ">Add to your feed <button className="btn btn-default"><i className="fa fa-info-circle" aria-hidden="true"></i></button></h5>
                                {

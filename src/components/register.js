@@ -41,7 +41,14 @@ let Register = () => {
             let {latitude, longitude} = position.coords;
             fetch(`https://geocode.xyz/${latitude},${longitude}?geoit=json&auth=12089947731624610099x54883`)
             .then(response => response.json())
-            .then(data => {setUserLocation(data.city + ', ' + data.state)})
+            .then(data => {
+                if (!data.error){
+                    console.log(data)
+                    setUserLocation(data.city + ', ' + data.state)
+                }else{
+                    setUserLocation('')
+                }
+            })
         })
     }
 
@@ -65,13 +72,18 @@ let Register = () => {
 
     return (
       <div>
-            <div className="row rowBackgroundImg">
-                <div className="col-md-6"></div>
+            <div className="row registerContainer">
+                <div className="col-md-6 loginLeftContainer">
+                    <img src="/images/login.jpg" alt="" className="loginImage"/>
+                </div>
                 <div className="col-md-6 loginContainer">
-                    {/*<img src="/images/Linkedin-Logo-2048x1280.png" alt="Linkedin-Logo-2048x1280.webp" width="130" height="70" className="d-flex" />*/}
-                <div class="card">
-                    <div class="card-body">
+                <div className="card">
+                    <div className="card-body">
                     <form onSubmit={registerHandler}>
+                        <h3 className="text-center welcomeLoginMessage">
+                            Hello, 👋🏽 do you want to join
+                            us?
+                        </h3>
                         {error && (<div className="alert alert-danger" role="alert">{error}</div>)}
                         <div {...getRootProps({className: 'dropzone'})}>
                             <input {...getInputProps()} />
@@ -83,31 +95,32 @@ let Register = () => {
                         </div>
 
 
-
-                    <div class="form-group">
-                            <label for="name">Full name</label>
-                            <input type="text" class="form-control" id="name" value={name} onChange={(e)=>setName(e.target.value)}/>
+                    <div className="form-group">
+                            <label htmlFor="name">Full name</label>
+                            <input type="text" placeholder="Enter Your full name" className="form-control" id="name" value={name} onChange={(e)=>setName(e.target.value)}/>
                         </div>
-                        <div class="form-group">
-                            <label for="email">Email address</label>
-                            <input type="email" class="form-control" id="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
+                        <div className="form-group">
+                            <label htmlFor="email">Email address</label>
+                            <input type="email" placeholder="Enter your email"  className="form-control" id="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="email"> Location</label>
-                            <input type="text" className="form-control" id="userlocation" value={userlocation}
+                            <input type="text" placeholder="Enter your location" className="form-control" id="userlocation" value={userlocation}
                                    onChange={(e) => setUserLocation(e.target.value)} />
                         </div>
                         <div className="form-group">
                             <label htmlFor="email"> Occupation</label>
-                            <input type="text" className="form-control" id="occupatoin" value={occupation}
+                            <input type="text" placeholder="Enter your occupation" className="form-control" id="occupatoin" value={occupation}
                                    onChange={(e) => setOccupation(e.target.value)}/>
                         </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
+                        <div className="form-group">
+                            <label htmlFor="password">Password</label>
+                            <input type="password" placeholder="Enter your password" className="form-control" id="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary signBtn">Join now</button>
+                        <button type="submit" className="registerBtn">
+                            {isLoading ? <Spinner/> : 'Sign Up'}
+                        </button>
                         <small >
                           <Link to="/" className="join">
                             Already Have an account ? Sign in

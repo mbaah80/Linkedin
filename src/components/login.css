@@ -1,8 +1,9 @@
 .loginContainer{
-    color:#000;
-    height: 100vh;
     display: flex;
     justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #fff;
 }
 .rowBackgroundImg{
     background-image: url("https://t3.ftcdn.net/jpg/02/21/90/22/360_F_221902233_dVRtPojWB62WzEZ6zc2cgv6gIgSbuzdO.jpg");
@@ -11,44 +12,51 @@
     background-position: top;
     height: 100vh;
 }
+
 .loginContainer .card{
     background-color: #fff;
     border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+    padding: 40px;
     width: 600px;
-    height: 500px;
-    margin-top: 30%;
+    border: none;
+}
+.loginLeftContainer{
+    height: 100vh;
+}
+.loginImage{
+    width: 100%;
+    height: 100%;
+    object-fit: cover !important;
+    padding: 10px;
+    border-radius: 20px !important;
 }
 .card{
     background-color: #fff;
     border-radius: 10px;
 }
-.signBtn{
+.registerBtn{
+    background-color: #000;
+    width: 100%;
+    border-radius: 10px;
+    color: #fff;
+    border: none;
     padding: 10px;
-    border: 1px solid #b798b5 !important;
-    background-color: #b798b5;
-    width: 100% !important;
-    border-radius: 14px;
-    color: #fff !important;
     margin-bottom: 10px;
-    margin-top: 20px;
-    display: grid;
+    transition: 0.5s;
 }
-.signBtn:hover{
+.registerBtn:hover{
     background-color: #fff;
-    color: #b798b5 !important;
+    color: #000;
+    border: 1px solid #939393;
+    transition: 0.5s;
 }
+
 .form-check{
     margin-left: auto;
 }
 input{
-    outline: none !important;
-    box-shadow: none !important;
     background-color: transparent !important;
-    border:none !important;
-    border-radius: 0px !important;
-    border-bottom: 1px solid #b798b5 !important;
+    border-radius: 10px !important;
 }
 
 .forgotPassword{
@@ -79,4 +87,26 @@ input{
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #000;
+}
+.welcomeLoginMessage{
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+    .loginContainer{
+        height: 100%;
+    }
+    .loginLeftContainer{
+        display: none;
+    }
+    .loginContainer .card{
+        width: 100%;
+        border-radius: 0px;
+    }
+    .rowBackgroundImg{
+        display: none;
+    }
 }

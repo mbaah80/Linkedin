@@ -12,18 +12,18 @@ let Leftsidebar = () =>{
             <img className="card-img-top coverImage" src="https://images.panda.org/assets/images/pages/welcome/orangutan_1600x1000_279157.jpg" alt="Card image cap"/>
                 <div class="card-body">
                     <div className="userProfileImg">
-                        <img src={`http://localhost:3002/profile/${loggedInUser.user.picturePath}`}  className="userProfileAvatar" />
+                        <img src={`http://localhost:3002/profile/${loggedInUser && loggedInUser.user.picturePath}`}  className="userProfileAvatar" />
                     </div> 
                     <div className="userProfileName mb-2">
-                        <p><a href="#" className="text-dark">{loggedInUser.user.name}</a></p>
-                        <small>{loggedInUser.user.occupation} - {loggedInUser.user.location}</small>
+                        <p><a href="#" className="text-dark">{loggedInUser && loggedInUser.user.name}</a></p>
+                        <small>{loggedInUser && loggedInUser.user.occupation} - {loggedInUser && loggedInUser.user.location}</small>
                     </div>
                 </div>
                 <div className="card-footer">
                        <a href="#" className="viewProfiled btn btn-default btn-sm recommedBtn"><small>Who's viewed your profile</small>
                         <small className="actionNumbers">19</small></a>
                         <a href="#" className="viewProfiled btn btn-default btn-sm recommedBtn"><small>Impressions of your post</small>
-                        <small className="actionNumbers">{loggedInUser.user.impressions}</small>
+                        <small className="actionNumbers">{loggedInUser && loggedInUser.user.impressions}</small>
                         </a>
                 </div>
                 <div className="card-footer">
