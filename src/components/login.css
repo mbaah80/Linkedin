@@ -64,30 +64,29 @@ input{
     padding: 10px
 }
 
-.profileImage{
-    width: 70px;
-    height:70px;
-    border-radius: 50%;
-    border: #666666 2px solid;
-    object-fit: cover;
-}
-.profileImage:hover{
-    border: #b798b5 2px solid;
-}
-.profileIcon{
-    font-size: 70px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.profileIcon:hover{
-    color: #b798b5;
-}
+
 .profileImageContainer{
+    float: right;
+    color: #545454 !important;
+    text-decoration: underline;
+}
+.profileImage{
+    width: 50px !important;
+    height: 50px !important;
+    object-fit: cover !important;
+    border-radius: 20px !important;
+    border: 1px solid #d9d9d9;
+    padding: 5px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #000;
+}
+.profileImageLoad{
+    cursor: pointer;
+}
+.profileImageLoad:hover{
+    color: #000 !important;
 }
 .welcomeLoginMessage{
     font-size: 24px;
@@ -174,7 +173,7 @@ input{
         justify-content: center;
         align-items: center;
     }
-    
+
     .loginContainer .card {
         width: 100%;
         border-radius: 0;

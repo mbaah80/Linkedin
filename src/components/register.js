@@ -22,6 +22,13 @@ let Register = () => {
         <img className="profileImage" key={file.path} src={URL.createObjectURL(file)} alt={file.name} />
     ));
 
+    const handleDrop = () => {
+        if (acceptedFiles.length > 0) {
+            alert('Image added successfully!');
+            console.log(acceptedFiles, 'acceptedFiles')
+        }
+    };
+
     const {user, isError, isSuccess, isLoading, message} = useSelector(state => state.auth)
 
     useEffect(()=>{
@@ -85,12 +92,11 @@ let Register = () => {
                             us?
                         </h3>
                         {error && (<div className="alert alert-danger" role="alert">{error}</div>)}
-                        <div {...getRootProps({className: 'dropzone'})}>
+                        <div {...getRootProps({className: 'dropzone'})} className="profileImageContainer" onDrop={handleDrop}>
                             <input {...getInputProps()} />
-                           <div className="profileImageContainer">
-                               <button type="button" className="btn btn-default">
-                                   {files.length > 0 ? files : <i className="fa fa-user-circle-o profileIcon" aria-hidden="true"></i>}
-                               </button>
+                           <div className="profileIMAGE" >
+                               {
+                                   files.length > 0 ? files : <p className="profileImageLoad"> Upload Profile Image</p>}
                            </div>
                         </div>
 
