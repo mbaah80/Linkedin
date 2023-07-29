@@ -60,7 +60,18 @@ let HomeCard = () =>{
             const postData = new FormData();
             postData.append('message', message)
             acceptedFiles.forEach(file => postData.append('picturePath', file));
-            await dispatch(createPost(postData))
+            if (message.length === 0 && acceptedFiles.length === 0) {
+                return alert('Please enter a message or select a file')
+            }
+            await dispatch(createPost(postData)).then((res)=>{
+                if(res.error){
+                    alert(res.error)
+                }else{
+                    setMessage('');
+                    setAcceptedFiles([]);
+                    console.log(res, 'res')
+                }
+            })
 
             setMessage('');
             setAcceptedFiles([]);
@@ -109,6 +120,9 @@ let HomeCard = () =>{
         dispatch(deleteComment(commentData))
     }
 
+    const sortedPosts = [...posts].sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
 
     return(
         <div className="col-md-5 homeCard">
@@ -120,27 +134,22 @@ let HomeCard = () =>{
                         <button className="btn btn-primary btn-sm SearchBtn" data-toggle="modal" data-target=".bd-example-modal-lg">Start a post</button>
                     </div>
                 </div>
-                <div className="card-footer startPostFooter">
-                    <a href="javascript:void(0)" data-toggle="modal" data-target=".bd-example-modal-lg" className="btn btn-default"><i className="fa fa-picture-o" aria-hidden="true"></i> Photo</a>
-                    <a href="javascript:void(0)" data-toggle="modal" data-target=".bd-example-modal-lg" className="btn btn-default"><i className="fa fa-file-video-o" aria-hidden="true"></i> Video</a>
-                    <a href="javascript:void(0)" className="btn btn-default"><i className="fa fa-calendar-check-o" aria-hidden="true"></i> Event</a>
-                    <a href="javascript:void(0)" className="btn btn-default"><i className="fa fa-newspaper-o" aria-hidden="true"></i> Write article</a>
-            </div>
+
             </div>
            </div>
 
             {
-                posts.length > 0 ? (posts.map(post=>(
+                sortedPosts.length > 0 ? (sortedPosts.map(post=>(
                     <div key={post._id} className="card mt-2 mb-2">
                         {
-                            post.repostedBy  ?
+                            sortedPosts &&  sortedPosts.repostedBy  ?
                                 <div className="reportContainer" key={post.repostedBy._id} >
                                     <div className="repostUser">
-                                        <img src={`http://localhost:3002/profile/${post.repostedBy.userPicturePath}`}  className="profileAvatarRepost" alt="image" />
-                                        <small>{post.repostedBy.name}</small>
+                                        <img src={`http://localhost:3002/profile/${sortedPosts.repostedBy.userPicturePath}`}  className="profileAvatarRepost" alt="image" />
+                                        <small>{sortedPosts.repostedBy.name}</small>
                                     </div>
                                     {
-                                        post.repostedBy.userId === user.user.id ?
+                                        sortedPosts.repostedBy.userId === user.user.id ?
                                             <button className="btn btn-default btn-sm closePostBtn" onClick={()=> dispatch(deletePost(post._id))}><i className="fa " aria-hidden="true">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
                                                      data-supported-dps="16x16" fill="currentColor" className="mercado-match"
@@ -157,46 +166,47 @@ let HomeCard = () =>{
                                 : null
                         }
 
-                        <div className="feedContainer mt-4 ml-4">
-                            <img src={`http://localhost:3002/profile/${post.userPicturePath}`}  className="profileAvatar" />
+                        <div className="feedContainer mt-4 ml-2">
+                            <img src={`http://localhost:3002/profile/${post.userPicturePath}`}  className="profileAvatarPostHome" />
                             <div className="avatarInfo">
                                 <div className="nameBtn secondNameFollowHolder ">
-                                    <a href="#" className="text-dark">{post.name}</a>
-                                    <span className="followHolder">
-                                {post.name !== user.user.name && <button onClick={() => dispatch(followUser(user.user._id))} className="btn btn-primary btn-sm"><i className="fa fa-plus" aria-hidden="true"></i> Follow</button>}
-                            </span>
-                                    {/*<span className="ml-auto text-dark">*/}
-                                    {/*     {*/}
-                                    {/*         post.userId === user.user.id ?*/}
-                                    {/*             <button className="btn btn-default btn-sm closePostBtn" onClick={()=> dispatch(deletePost(post._id))}><i className="fa " aria-hidden="true">*/}
-                                    {/*                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"*/}
-                                    {/*                      data-supported-dps="16x16" fill="currentColor" className="mercado-match"*/}
-                                    {/*                      width="16" height="16" focusable="false">*/}
-                                    {/*                     <path*/}
-                                    {/*                         d="M14 3.41L9.41 8 14 12.59 12.59 14 8 9.41 3.41 14 2 12.59 6.59 8 2 3.41 3.41 2 8 6.59 12.59 2z"></path>*/}
-                                    {/*                 </svg>*/}
-                                    {/*             </i>*/}
-                                    {/*             </button>*/}
-                                    {/*             : null*/}
-                                    {/*     }*/}
+                                    <small  className="text-dark">{post.name}</small>
+                                    {/*<span className="followHolder">*/}
+                                    {/*    {post.name !== user.user.name && <button onClick={() => dispatch(followUser(user.user._id))} className="btn btn-primary btn-sm"><i className="fa fa-plus" aria-hidden="true"></i> Follow</button>}*/}
                                     {/*</span>*/}
+                                    <span className="ml-auto text-dark">
+                                         {
+                                           post &&  post.userId === user.user.id ?
+                                                 <button className="btn btn-default btn-sm closePostBtn" onClick={()=> dispatch(deletePost(post._id))}><i className="fa " aria-hidden="true">
+                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
+                                                          data-supported-dps="16x16" fill="currentColor" className="mercado-match"
+                                                          width="16" height="16" focusable="false">
+                                                         <path
+                                                             d="M14 3.41L9.41 8 14 12.59 12.59 14 8 9.41 3.41 14 2 12.59 6.59 8 2 3.41 3.41 2 8 6.59 12.59 2z"></path>
+                                                     </svg>
+                                                 </i>
+                                                 </button>
+                                                 : null
+                                         }
+                                    </span>
                                 </div>
-                                <small>{post.occupation}</small>
                                 <small>{moment(post.createdAt).subtract(1, "days").fromNow()} <i className="fa fa-globe" aria-hidden="true"></i></small>
                             </div>
                         </div>
                         <p className="Post">
-                            {post.message}
+                            {post && post.message}
                         </p>
-                        {post && post.picturePath && (
+
+                        {post && post.picturePath ? (
                             <a href="#" className="text-dark">
-                                {post.picturePath.endsWith('.jpg') || post.picturePath.endsWith('.jpeg') || post.picturePath.endsWith('.png') ? (
+                                {['.jpg', '.jpeg', '.png'].some(ext => post.picturePath.endsWith(ext)) ? (
                                     <img className="card-img-top" src={`http://localhost:3002/assets/${post.picturePath}`} alt={post.id} />
                                 ) : (
-                                    <video className="card-img-top" controls autoPlay={true} src={`http://localhost:3002/assets/${post.picturePath}`}></video>
+                                    <video className="card-img-top" controls autoPlay src={`http://localhost:3002/assets/${post.picturePath}`}></video>
                                 )}
                             </a>
-                        )}
+                        ) : null}
+
                         <div className="card-body">
                             <div className=" PostReactions">
                                 {
@@ -276,7 +286,7 @@ let HomeCard = () =>{
                <div className="modal-dialog modal-lg" role="document">
                 <div className="modal-content">
                 <div className="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Create a post</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Create Post</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -292,10 +302,6 @@ let HomeCard = () =>{
 
                     <div >{files}</div>
 
-                    <div className="d-flex align-items-center hashtag">
-                        <button className="btn btn-default btn-sm commentIcon"><i className="fa fa-smile-o" aria-hidden="true"></i> </button>
-                        <a href="#" className="ml-2 btn btn-primary btn-sm"> Add hashtag</a>
-                    </div>
                 </div>
                 <div className="modal-footer postActions">
                     <div className="btn btn-default d-flex align-items-center">
@@ -304,14 +310,16 @@ let HomeCard = () =>{
                             <button type="button" className="btn btn-default"><i className="fa fa-picture-o" aria-hidden="true"></i></button>
                         </div>
                         <button type="button" className="btn btn-default " ><i className="fa fa-video-camera" aria-hidden="true"></i></button>
-                        <button type="button" className="btn btn-default" ><i className="fa fa-file-text" aria-hidden="true"></i></button>
-                        <button type="button" className="btn btn-default" ><i className="fa fa-ellipsis-h" aria-hidden="true"></i></button>
-                        <button type="button" className="btn btn-default divider" >|</button>
-                        <button type="button" className="btn btn-default" ><i className="fa fa-commenting-o" aria-hidden="true"></i> Anyone</button>
                     </div>
                     <div>
                         <button type="button" className="btn btn-default" ><i className="fa fa-clock-o" aria-hidden="true"></i></button>
-                        <button type="button" data-dismiss="modal" disabled={!message }  className="btn btn-default  postBtn" onClick={postHandler}>Post</button>
+                        <button
+                            disabled={
+                                message === "" && files.length === 0
+                            }
+                            type="button"
+                            className="btn btn-default  postBtn"
+                            onClick={postHandler}>Post</button>
                     </div>
                 </div>
                 </div>

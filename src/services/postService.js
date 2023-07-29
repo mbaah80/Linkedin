@@ -7,7 +7,7 @@ let baseUrl = "http://localhost:3002/";
 const createPost = async (postData, token) => {
     const config = {
         headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
     }
     const response = await axios.post(baseUrl + 'posts/CreatePost', postData, config)
