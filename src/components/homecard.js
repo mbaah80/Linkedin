@@ -6,6 +6,8 @@ import {createPost, getFeedPosts, likePost, commentPost, rePost, deletePost, del
 import {followUser} from "../features/user/userSlice";
 import Spinner from './spinner'
 import './sidebars/sidebars.css'
+import { Toaster, toast } from 'react-hot-toast';
+
 import storage from "../firebase.js"
 import { ref, uploadBytesResumable, getDownloadURL, uploadBytes } from "firebase/storage";
 
@@ -18,6 +20,7 @@ let HomeCard = () =>{
     const [dropzoneKey, setDropzoneKey] = useState(0);
     const [picturePath, setPicturePath] = useState('')
     const [error, setError] = useState('')
+    const [mediaType, setMediaType] = useState('')
 
 
     const { getRootProps, getInputProps } = useDropzone({
@@ -27,31 +30,47 @@ let HomeCard = () =>{
             setAcceptedFiles(files);
             setDropzoneKey(dropzoneKey + 1);
             const file = files[0];
-            const date = new Date()
+            const date = new Date();
             const storageRef = ref(storage, `/posts/${file.name}`);
-            uploadBytes(storageRef, file).then((snapshot) => {
-                getDownloadURL(snapshot.ref).then((url) => {
-                    setPicturePath(url);
+
+            // Check the file type using the MIME type (file.type property)
+            const isImage = file.type.startsWith('image/');
+            const isVideo = file.type.startsWith('video/');
+
+            if (isImage || isVideo) {
+                setMediaType(isImage ? 'image' : 'video');
+                uploadBytes(storageRef, file).then((snapshot) => {
+                    getDownloadURL(snapshot.ref).then((url) => {
+                        setPicturePath(url);
+                        toast.success(`${isImage ? 'Image' : 'Video'} uploaded successfully`);
+                    });
                 });
-            })
+            } else {
+                toast.error('Invalid file type. Please upload an image or video.');
+            }
         },
         maxSize: 5000000 // limit image size to 5MB
     });
 
 
+
     const {user} = useSelector(state => state.auth)
     const {posts,  isError, isSuccess, isLoading, message: msg} = useSelector(state => state.post)
+
 
     useEffect(()=>{
         if(isError){
             setError(msg)
         }
          dispatch(reset())
-         dispatch(getFeedPosts())
         return () => {
             dispatch(reset())
         }
     },[user,isError, msg, dispatch])
+
+    useEffect(()=>{
+        dispatch(getFeedPosts())
+    },[dispatch])
 
     if(isLoading){
         //return <Spinner class="loader"/>
@@ -74,6 +93,7 @@ let HomeCard = () =>{
             let postData = {
                 message,
                 picturePath,
+                mediaType,
             }
             console.log(postData, 'postData')
             if(postData.message.length === 0 && postData.picturePath.length === 0){
@@ -82,11 +102,13 @@ let HomeCard = () =>{
             }
             await dispatch(createPost(postData)).then((res)=>{
                 if(res.error){
-                    alert(res.error)
+                    toast.error(res.error)
                 }else{
                     setMessage('');
                     setAcceptedFiles([]);
-                    console.log(res, 'res')
+                    setPicturePath('')
+                    setDropzoneKey(dropzoneKey + 1);
+                    toast.success('Post created successfully');
                 }
             })
 
@@ -146,12 +168,11 @@ let HomeCard = () =>{
            <div className="card">
             <div className="card-body">
                 <div className="feedContainer">
-                    <img src={`http://localhost:3002/profile/${user && user.user.picturePath}`}  className="profileAvatar" alt="image" />
+                    <img src={`https://backend-gamma-rouge.vercel.app/profile/${user && user.user.picturePath}`}  className="profileAvatar" alt="image" />
                     <div className="avatarInfo">
                         <button className="btn btn-primary btn-sm SearchBtn" data-toggle="modal" data-target=".bd-example-modal-lg">Start a post</button>
                     </div>
                 </div>
-
             </div>
            </div>
 
@@ -214,15 +235,19 @@ let HomeCard = () =>{
                             {post && post.message}
                         </p>
 
-                        {post && post.picturePath ? (
+                        {post && post.picturePath && (
                             <a href="#" className="text-dark">
-                                {['.jpg', '.jpeg', '.png'].some(ext => post.picturePath.endsWith(ext)) ? (
-                                    <img className="card-img-top" src={`${post.picturePath}`} alt={post.id} />
-                                ) : (
-                                    <video className="card-img-top" controls autoPlay src={`${post.picturePath}`}></video>
-                                )}
+                                {post.picturePath.startsWith('http') ? (
+                                    post.picturePath.endsWith('.mp4') ? (
+                                        <video className="card-img-top" controls autoPlay src={post.picturePath}></video>
+                                    ) : (
+                                        <img className="card-img-top" src={post.picturePath} alt={post.id} />
+                                    )
+                                ) : null}
                             </a>
-                        ) : null}
+                        )}
+
+
 
                         <div className="card-body">
                             <div className=" PostReactions">
@@ -260,7 +285,6 @@ let HomeCard = () =>{
                             <button onClick={()=> dispatch(likePost(post._id))} className="btn btn-default"><i className="fa fa-thumbs-o-up" aria-hidden="true"></i> Like</button>
                             <a onClick={()=>focusCommentInput(post._id)} className="btn btn-default"><i className="fa fa-comment-o" aria-hidden="true"></i> Comment</a>
                             <a href="javascript:void(0)" onClick={()=>dispatch(rePost(post._id))} className="btn btn-default"><i className="fa fa-refresh" aria-hidden="true"></i> Repost</a>
-                            <a href="javascript:void(0)" onClick={()=>sendPostHandler(post)} className="btn btn-default"><i className="fa fa-paper-plane-o" aria-hidden="true"></i> Send</a>
                         </div>
                         <div className="feedContainer p-2 mt-2">
                             <img src={`${user.user.picturePath}`}  className="profileAvatar" />

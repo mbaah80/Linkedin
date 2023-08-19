@@ -12,7 +12,7 @@ let Leftsidebar = () =>{
             <img className="card-img-top coverImage" src="https://images.panda.org/assets/images/pages/welcome/orangutan_1600x1000_279157.jpg" alt="Card image cap"/>
                 <div class="card-body">
                     <div className="userProfileImg">
-                        <img src={`http://localhost:3002/profile/${loggedInUser && loggedInUser.user.picturePath}`}  className="userProfileAvatar" />
+                        <img src={`https://backend-gamma-rouge.vercel.app/profile/${loggedInUser && loggedInUser.user.picturePath}`}  className="userProfileAvatar" />
                     </div> 
                     <div className="userProfileName mb-2">
                         <p><a href="#" className="text-dark">{loggedInUser && loggedInUser.user.name}</a></p>

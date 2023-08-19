@@ -7,6 +7,7 @@ import Network from './components/networks/network'
 import Jobs from './components/jobs/jobs';
 import Notification  from "./components/notifications/notification";
 import Header from  './components/headers/header'
+import {Toaster} from "react-hot-toast";
 
 
 function App() {
@@ -14,6 +15,11 @@ function App() {
       <BrowserRouter>
         <div className="App">
           <div className="container-fluid">
+              <Toaster
+                  position="top-right"
+                  reverseOrder={false}
+              />
+
               {/*<Header />*/}
               <Routes>
                   <Route path="/" element={<Login/>}/>
