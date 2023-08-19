@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-let baseUrl = "http://localhost:3002/auth/"
+let baseUrl = "https://backend-gamma-rouge.vercel.app/auth/"
 
 const login = async (userData) =>{
     const response = await axios.post(baseUrl + 'login', userData)

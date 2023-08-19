@@ -6,6 +6,8 @@ import {createPost, getFeedPosts, likePost, commentPost, rePost, deletePost, del
 import {followUser} from "../features/user/userSlice";
 import Spinner from './spinner'
 import './sidebars/sidebars.css'
+import storage from "../firebase.js"
+import { ref, uploadBytesResumable, getDownloadURL, uploadBytes } from "firebase/storage";
 
 let HomeCard = () =>{
 
@@ -14,15 +16,24 @@ let HomeCard = () =>{
     const [comment, setComment] = useState('')
     const [acceptedFiles, setAcceptedFiles] = useState([]);
     const [dropzoneKey, setDropzoneKey] = useState(0);
+    const [picturePath, setPicturePath] = useState('')
     const [error, setError] = useState('')
 
 
     const { getRootProps, getInputProps } = useDropzone({
         acceptedFiles: "image/*, video/*",
         maxFiles: 1,
-        onDrop: files => {
+        onDrop: (files) => {
             setAcceptedFiles(files);
             setDropzoneKey(dropzoneKey + 1);
+            const file = files[0];
+            const date = new Date()
+            const storageRef = ref(storage, `/posts/${file.name}`);
+            uploadBytes(storageRef, file).then((snapshot) => {
+                getDownloadURL(snapshot.ref).then((url) => {
+                    setPicturePath(url);
+                });
+            })
         },
         maxSize: 5000000 // limit image size to 5MB
     });
@@ -53,15 +64,21 @@ let HomeCard = () =>{
         }else{
             return <video className="card-img-top feedImage" src={URL.createObjectURL(file)} autoPlay={true}  key={file.name} />
         }
-        });
+    });
+
+
+
     let postHandler = async (e) =>{
         try {
             e.preventDefault();
-            const postData = new FormData();
-            postData.append('message', message)
-            acceptedFiles.forEach(file => postData.append('picturePath', file));
-            if (message.length === 0 && acceptedFiles.length === 0) {
-                return alert('Please enter a message or select a file')
+            let postData = {
+                message,
+                picturePath,
+            }
+            console.log(postData, 'postData')
+            if(postData.message.length === 0 && postData.picturePath.length === 0){
+                alert("Please enter a message or upload a picture")
+                return;
             }
             await dispatch(createPost(postData)).then((res)=>{
                 if(res.error){
@@ -145,7 +162,7 @@ let HomeCard = () =>{
                             sortedPosts &&  sortedPosts.repostedBy  ?
                                 <div className="reportContainer" key={post.repostedBy._id} >
                                     <div className="repostUser">
-                                        <img src={`http://localhost:3002/profile/${sortedPosts.repostedBy.userPicturePath}`}  className="profileAvatarRepost" alt="image" />
+                                        <img src={`${sortedPosts.repostedBy.userPicturePath}`}  className="profileAvatarRepost" alt="image" />
                                         <small>{sortedPosts.repostedBy.name}</small>
                                     </div>
                                     {
@@ -167,7 +184,7 @@ let HomeCard = () =>{
                         }
 
                         <div className="feedContainer mt-4 ml-2">
-                            <img src={`http://localhost:3002/profile/${post.userPicturePath}`}  className="profileAvatarPostHome" />
+                            <img src={`${post.userPicturePath}`}  className="profileAvatarPostHome" />
                             <div className="avatarInfo">
                                 <div className="nameBtn secondNameFollowHolder ">
                                     <small  className="text-dark">{post.name}</small>
@@ -200,9 +217,9 @@ let HomeCard = () =>{
                         {post && post.picturePath ? (
                             <a href="#" className="text-dark">
                                 {['.jpg', '.jpeg', '.png'].some(ext => post.picturePath.endsWith(ext)) ? (
-                                    <img className="card-img-top" src={`http://localhost:3002/assets/${post.picturePath}`} alt={post.id} />
+                                    <img className="card-img-top" src={`${post.picturePath}`} alt={post.id} />
                                 ) : (
-                                    <video className="card-img-top" controls autoPlay src={`http://localhost:3002/assets/${post.picturePath}`}></video>
+                                    <video className="card-img-top" controls autoPlay src={`${post.picturePath}`}></video>
                                 )}
                             </a>
                         ) : null}
@@ -246,7 +263,7 @@ let HomeCard = () =>{
                             <a href="javascript:void(0)" onClick={()=>sendPostHandler(post)} className="btn btn-default"><i className="fa fa-paper-plane-o" aria-hidden="true"></i> Send</a>
                         </div>
                         <div className="feedContainer p-2 mt-2">
-                            <img src={`http://localhost:3002/profile/${user.user.picturePath}`}  className="profileAvatar" />
+                            <img src={`${user.user.picturePath}`}  className="profileAvatar" />
                             <div className="writeComment">
                                 <input type="text" className="form-control" id={post._id + `commentInput`} placeholder="Write a comment..." value={comment} onChange={(e)=>setComment(e.target.value)} />
                                 <button className="btn btn-primary btn-sm commentIcon" disabled={!comment} onClick={()=>sendCommentHandler(post._id)}>Post</button>
@@ -257,7 +274,7 @@ let HomeCard = () =>{
                                 post.comments  ? post.comments.map((comment) => (
                                     <div className="commentContainer" key={comment._id} >
                                         <div className="commentUser">
-                                            <img src={`http://localhost:3002/profile/${comment.userPicturePath}`}  className="profileAvatar" alt="image" />
+                                            <img src={`${comment.userPicturePath}`}  className="profileAvatar" alt="image" />
                                           <span className="commentDiv">
                                                 <div className="commentAction">
                                                     <span className="text-dark font-weight-bold">{comment.name} <small>{moment(comment.date).subtract(1, "days").fromNow()}</small></span>
@@ -294,7 +311,7 @@ let HomeCard = () =>{
                 <div className="modal-body">
                     {error && <div className="alert alert-danger">{error}</div>}
                 <div className="feedContainer">
-                    <img src={`http://localhost:3002/profile/${user && user.user.picturePath}`}  className="profileAvatar" />
+                    <img src={`${user && user.user.picturePath}`}  className="profileAvatar" />
                     <button className="btn btn-default btn-sm modalBtn mt-1"><i className="fa fa-street-view" aria-hidden="true"></i> {user && user.user.name} <i className="fa fa-caret-down" aria-hidden="true"></i></button>
                     <button className="btn btn-default btn-sm modalBtn mt-1"><i className="fa fa-globe" aria-hidden="true"></i> Anyone <i className="fa fa-caret-down" aria-hidden="true"></i></button>
                 </div>

@@ -1,6 +1,6 @@
 import axios   from "axios";
 
-let baseUrl = "http://localhost:3002/";
+let baseUrl = "https://backend-gamma-rouge.vercel.app/";
 
 
 
