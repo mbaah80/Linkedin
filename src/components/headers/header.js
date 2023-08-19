@@ -34,7 +34,7 @@ let Header = () => {
                     <ul className="navbar-nav ml-auto">
                         <li className="nav-item">
                             <a className="nav-link d-flex align-items-center" href="#">
-                                <img src={`${user && user.user.picturePath}`} className="profileAvatarPost"/>
+                                <img src={`https://backend-gamma-rouge.vercel.app/profile/${user && user.user.picturePath}`} className="profileAvatarPost"/>
                                 <b>{user && user.user.name}</b>
                             </a>
                         </li>

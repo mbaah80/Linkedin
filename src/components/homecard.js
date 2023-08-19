@@ -183,7 +183,7 @@ let HomeCard = () =>{
                             sortedPosts &&  sortedPosts.repostedBy  ?
                                 <div className="reportContainer" key={post.repostedBy._id} >
                                     <div className="repostUser">
-                                        <img src={`${sortedPosts.repostedBy.userPicturePath}`}  className="profileAvatarRepost" alt="image" />
+                                        <img src={`https://backend-gamma-rouge.vercel.app/profile/${sortedPosts.repostedBy.userPicturePath}`}  className="profileAvatarRepost" alt="image" />
                                         <small>{sortedPosts.repostedBy.name}</small>
                                     </div>
                                     {
@@ -205,7 +205,7 @@ let HomeCard = () =>{
                         }
 
                         <div className="feedContainer mt-4 ml-2">
-                            <img src={`${post.userPicturePath}`}  className="profileAvatarPostHome" />
+                            <img src={`https://backend-gamma-rouge.vercel.app/profile/${post.userPicturePath}`}  className="profileAvatarPostHome" />
                             <div className="avatarInfo">
                                 <div className="nameBtn secondNameFollowHolder ">
                                     <small  className="text-dark">{post.name}</small>
@@ -238,7 +238,7 @@ let HomeCard = () =>{
                         {post && post.picturePath && (
                             <a href="#" className="text-dark">
                                 {post.picturePath.startsWith('http') ? (
-                                    post.picturePath.endsWith('.mp4') ? (
+                                    post.mediaType === 'video' ? (
                                         <video className="card-img-top" controls autoPlay src={post.picturePath}></video>
                                     ) : (
                                         <img className="card-img-top" src={post.picturePath} alt={post.id} />
@@ -246,7 +246,6 @@ let HomeCard = () =>{
                                 ) : null}
                             </a>
                         )}
-
 
 
                         <div className="card-body">
@@ -287,7 +286,7 @@ let HomeCard = () =>{
                             <a href="javascript:void(0)" onClick={()=>dispatch(rePost(post._id))} className="btn btn-default"><i className="fa fa-refresh" aria-hidden="true"></i> Repost</a>
                         </div>
                         <div className="feedContainer p-2 mt-2">
-                            <img src={`${user.user.picturePath}`}  className="profileAvatar" />
+                            <img src={`https://backend-gamma-rouge.vercel.app/profile/${user.user.picturePath}`}  className="profileAvatar" />
                             <div className="writeComment">
                                 <input type="text" className="form-control" id={post._id + `commentInput`} placeholder="Write a comment..." value={comment} onChange={(e)=>setComment(e.target.value)} />
                                 <button className="btn btn-primary btn-sm commentIcon" disabled={!comment} onClick={()=>sendCommentHandler(post._id)}>Post</button>
@@ -298,7 +297,7 @@ let HomeCard = () =>{
                                 post.comments  ? post.comments.map((comment) => (
                                     <div className="commentContainer" key={comment._id} >
                                         <div className="commentUser">
-                                            <img src={`${comment.userPicturePath}`}  className="profileAvatar" alt="image" />
+                                            <img src={`https://backend-gamma-rouge.vercel.app/profile/${comment.userPicturePath}`}  className="profileAvatar" alt="image" />
                                           <span className="commentDiv">
                                                 <div className="commentAction">
                                                     <span className="text-dark font-weight-bold">{comment.name} <small>{moment(comment.date).subtract(1, "days").fromNow()}</small></span>
@@ -308,7 +307,6 @@ let HomeCard = () =>{
                                                         </button>
                                                     </span>
                                                 </div>
-                                                 <span className="commentUserOccupation">{comment.occupation}</span>
                                                 <span>{comment.comment}</span>
                                           </span>
                                         </div>

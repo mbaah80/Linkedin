@@ -40,16 +40,34 @@ let Rightsidebar = () =>{
            {
                filteredUser &&    filteredUser.length > 0  ? (<div className="card" >
                            <div className="card-body">
-                               <h5 className="card-title ">Add to your feed <button className="btn btn-default"><i className="fa fa-info-circle" aria-hidden="true"></i></button></h5>
+                               <h6 style={{
+                                      borderBottom: '1px solid #d2d2d2',
+                                        paddingBottom: '10px',
+                                        marginBottom: '10px',
+                                        fontWeight: 'bold',
+                                        color: '#000',
+                                        fontSize: '12px'
+
+                               }}>
+                                      <i className="fa fa-user-plus" aria-hidden="true"></i> People you may know
+                               </h6>
                                {
                                    filteredUser.slice(0,2).map((user =>(
                                        <div className="feedContainer mt-4" key={user._id}>
                                            <img src={`http://localhost:3002/profile/${user.picturePath}`}
-                                                className="profileAvatar"/>
-                                           <div className="avatarInfo">
+                                                className="friendsprofileAvatar"/>
+                                           <div className="avatarInfo" style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                                                <h6>{user.name}</h6>
-                                               <small>{user.occupation}</small>
-                                               <button className="btn btn-primary btn-sm followBtn" onClick={() => followHandler(user._id)}>
+                                               <button
+                                                  style={{
+                                                        backgroundColor: '#fff',
+                                                        border: '1px solid #d2d2d2',
+                                                        color: '#000',
+                                                        padding: '5px 10px',
+                                                        borderRadius: '5px',
+                                                        fontSize: '10px',
+                                                  }}
+                                                   onClick={() => followHandler(user._id)}>
                                                    <i className="fa fa-plus" aria-hidden="true"></i> Follow
                                                </button>
                                            </div>
@@ -61,22 +79,6 @@ let Rightsidebar = () =>{
                            </div>
                        </div>) : null
            }
-
-         <div className="card mt-2 mb-2">
-            <div className="card-body">
-                <h5 className="card-title ">Ad <button className="btn btn-default"><i className="fa fa-ellipsis-h" aria-hidden="true"></i></button></h5>
-                <div className="feedContainer">
-                    <img src="https://media.istockphoto.com/id/1301953681/photo/young-woman-student-outdoor-portrait.jpg?b=1&s=170667a&w=0&k=20&c=eOWDZtzQ3pO4gM4GxDNmEorKcyyobgukLfnzjtguhKo="  className="profileAvatar" />
-                    <div className="avatarInfo">
-                        <h6>Sara Smith</h6>
-                        <small>Company • Nonprofit Organization Management</small>
-                        <button className="btn btn-primary btn-sm followBtn"><i className="fa fa-plus" aria-hidden="true"></i> Follow</button>
-                    </div>
-                </div>
-                <button className="btn btn-default btn-sm recommedBtn">View all recommendations <i className="fa fa-arrow-right" aria-hidden="true"></i></button>
-            </div>
-         </div>
-        
        </div>
     )
 }
