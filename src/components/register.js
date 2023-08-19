@@ -14,6 +14,7 @@ let Register = () => {
     let [occupation, setOccupation] = useState("");
     let [password, setPassword] = useState("");
     let [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
     let location = useNavigate();
     let dispatch = useDispatch();
 
@@ -35,13 +36,10 @@ let Register = () => {
         if(isError){
             setError(message)
         }
-        if(isSuccess || user){
-            location('/home')
-        }
         fetchUserLocation()
         dispatch(reset())
 
-    },[user, isError, isSuccess, isLoading, message, location, dispatch])
+    },[isError, isSuccess, isLoading, message, location, dispatch])
 
     let fetchUserLocation = () =>{
         navigator.geolocation.getCurrentPosition((position)=>{
@@ -61,6 +59,7 @@ let Register = () => {
 
     const registerHandler = (e) =>{
         e.preventDefault();
+        setLoading(true)
 
         let userData =  new FormData();
         userData.append('name', name)
@@ -70,9 +69,19 @@ let Register = () => {
         acceptedFiles.forEach(file => {userData.append('profileImage', file)})
         userData.append('password', password)
         if(userData.name !== '' && userData.email !== '' && userData.password !== ''){
-            dispatch(register(userData));
+            dispatch(register(userData)).then((res)=>{
+                setLoading(false)
+                if(res.error){
+                    setError(res.error.message)
+                    setLoading(false)
+                } else{
+                    location('/home')
+                    setLoading(false)
+                }
+            })
         }else{
             setError('All fields are required')
+            setLoading(false)
         }
     }
 
@@ -123,9 +132,14 @@ let Register = () => {
                             <label htmlFor="password">Password</label>
                             <input type="password" placeholder="Enter your password" className="form-control" id="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
                         </div>
-                        
-                        <button type="submit" className="registerBtn">
-                            {isLoading ? <Spinner/> : 'Sign Up'}
+
+                        <button type="submit"
+                                style={{backgroundColor: `${loading ? '#a6a6a6' : '#000000'}`}}
+                                className="registerBtn" disabled={loading}>
+                            {!loading && (<span className="signinLabelHolder">
+                                Sign up
+                            </span>)}
+                            {loading && (<span>Signing up... </span>)}
                         </button>
                         <small >
                           <Link to="/" className="join">

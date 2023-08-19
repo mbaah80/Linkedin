@@ -10,6 +10,7 @@ let Login = () => {
     let [email, setEmail] = useState("");
     let [password, setPassword] = useState("");
     let [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
     let location = useNavigate();
     let dispatch = useDispatch();
 
@@ -19,24 +20,30 @@ let Login = () => {
         if(isError){
             setError(message)
         }
-        if(isSuccess || user){
-           location('/home')
-        }
         dispatch(reset())
 
-    },[user, isError, isSuccess, isLoading, message, location, dispatch])
+    },[isError, isSuccess, isLoading, message, location, dispatch])
 
 
     const loginHandler = (e) =>{
         e.preventDefault();
+        setLoading(true)
         let userData = {
             email,
             password
         }
         if(userData.email !== '' && userData.password !== ''){
-            dispatch(login(userData))
+            dispatch(login(userData)).then((res)=>{
+                setLoading(false)
+                if(res.error){
+                    setError(res.error.message)
+                } else{
+                    location('/home')
+                }
+            })
         }else{
             setError('Email or Password field can\'t be empty')
+            setLoading(false)
         }
     }
 
@@ -71,9 +78,11 @@ let Login = () => {
                             <small>
                                 <a href="#passwordForgot" className="forgotPassword">Forgot Password ?</a>
                             </small>
-                            <button type="submit" className="registerBtn" disabled={isLoading}>
-                                {!isLoading && (<span className="signinLabelHolder">Sign in</span>)}
-                                {isLoading && (<span className="spinner-border text-secondary" role="status"></span>)}
+                            <button type="submit"
+                                    style={{backgroundColor: `${loading ? '#a6a6a6' : '#000000'}`}}
+                                    className="registerBtn" disabled={loading}>
+                                {!loading && (<span className="signinLabelHolder">Sign in</span>)}
+                                {loading && (<span>Signing in... </span>)}
                             </button>
 
                             <small>
