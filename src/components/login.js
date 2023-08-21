@@ -81,8 +81,34 @@ let Login = () => {
                             <button type="submit"
                                     style={{backgroundColor: `${loading ? '#a6a6a6' : '#000000'}`}}
                                     className="registerBtn" disabled={loading}>
-                                {!loading && (<span className="signinLabelHolder">Sign in</span>)}
+                                {!loading && (<span className="signinLabelHolder">Login in</span>)}
                                 {loading && (<span>Signing in... </span>)}
+                            </button>
+                            <button type="submit" disabled={loading}
+                                    style={{
+                                        borderRadius: '7px',
+                                        backgroundColor: '#eaeaea',
+                                        color: '#000',
+                                        border: 'none',
+                                        marginTop: '10px',
+                                        marginBottom: '10px',
+                                        width: '100%',
+                                        height: '40px',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                <img
+                                    src="https://img.icons8.com/color/28/000000/google-logo.png"
+                                    alt="google icon"
+                                    style={{
+                                        marginRight: '10px',
+                                        width: '20px',
+                                        height: '20px',
+                                        objectFit: 'contain'
+                                }}
+                                />
+                                Login in with Google
                             </button>
 
                             <small>
